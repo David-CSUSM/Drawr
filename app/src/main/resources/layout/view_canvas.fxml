@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.layout.HBox?>
 
 <HBox alignment="CENTER" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.thebinarybandits.drawr.canvas.CanvasController">
-    <Canvas height="640.0" width="640.0"/>
+    <Canvas fx:id="canvasView" height="640.0" onKeyPressed="#keyPressed" onMouseDragged="#mouseDragged"
+            onMousePressed="#mousePressed" width="640.0"/>
+    <padding>
+        <Insets bottom="33.0" left="33.0" right="33.0" top="33.0"/>
+    </padding>
 </HBox>
