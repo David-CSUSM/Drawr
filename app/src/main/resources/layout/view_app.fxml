@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.thebinarybandits.drawr.AppController">
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem mnemonicParsing="false" onAction="#newProject" text="New"/>
+                <MenuItem mnemonicParsing="false" onAction="#openProject" text="Open..."/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false" onAction="#saveProject" text="Save"/>
+                <MenuItem mnemonicParsing="false" onAction="#saveProjectAs" text="Save As..."/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+                <MenuItem mnemonicParsing="false" text="Undo"/>
+                <MenuItem mnemonicParsing="false" text="Redo"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    <left>
+        <fx:include source="view_tools.fxml"/>
+    </left>
+    <right>
+        <fx:include source="view_layers.fxml"/>
+    </right>
+    <center>
+        <fx:include source="view_canvas.fxml"/>
+    </center>
+</BorderPane>
