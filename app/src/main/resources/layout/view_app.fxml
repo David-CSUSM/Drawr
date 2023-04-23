@@ -31,6 +31,6 @@
         <fx:include source="view_layers.fxml"/>
     </right>
     <center>
-        <fx:include source="view_canvas.fxml"/>
+        <fx:include source="view_pane.fxml"/>
     </center>
 </BorderPane>
