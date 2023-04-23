@@ -56,6 +56,7 @@ public class PixelCanvasViewer {
     public void createNewPixelViewer() {
         int size = (int) viewers.get(0).getView().getWidth();
         viewers.add(factory.getNewPixelViewer(size));
+        ++viewerIndex;
     }
 
     public PixelViewer getActiveView() {

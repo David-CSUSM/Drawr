@@ -1,5 +1,6 @@
 package com.thebinarybandits.drawr.pane;
 
+import com.thebinarybandits.drawr.layers.LayersController;
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 import com.thebinarybandits.drawr.pixelcanvasviewer.PixelCanvasViewer;
 import com.thebinarybandits.drawr.tools.Tool;
@@ -8,6 +9,7 @@ import com.thebinarybandits.drawr.tools.Eraser;
 import com.thebinarybandits.drawr.tools.PaintBucket;
 
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -20,12 +22,15 @@ public class PaneController {
 
     @FXML
     private Pane pane;
+    private Canvas grid;
+    private LayersController layersController;
+
+    private PixelCanvas canvas;
+    private PixelCanvasViewer view;
     private int CANVAS_SIZE;
     private int VIEW_SIZE;
     private int SCALE;
 
-    private PixelCanvas canvas;
-    private PixelCanvasViewer view;
 
     private Tool activeTool;
 
@@ -37,15 +42,28 @@ public class PaneController {
         canvas = PixelCanvas.getInstance();
         view = PixelCanvasViewer.getInstance();
 
-        pane.getChildren().add(view.getActiveView().getView());
-
         CANVAS_SIZE = (int) canvas.getActiveLayer().getImage().getWidth();
         VIEW_SIZE = (int) view.getActiveView().getView().getWidth();
         SCALE = VIEW_SIZE / CANVAS_SIZE;
 
+        grid = new Canvas(VIEW_SIZE, VIEW_SIZE);
+
+        pane.getChildren().add(grid);
+        pane.getChildren().add(view.getActiveView().getView());
+        grid.toFront();
+
         overlayGrid();
 
         activeTool = new Pen();
+    }
+
+    public void setLayersController(LayersController controller) {
+        layersController = controller;
+    }
+
+    public void addPixelViewer(Canvas view) {
+        pane.getChildren().add(view);
+        grid.toFront();
     }
 
     @FXML
@@ -53,7 +71,9 @@ public class PaneController {
         if (event.getText().equals("f")) {
             canvas.getActiveLayer().clear();
             view.getActiveView().clear();
-            overlayGrid();
+
+            layersController.clearLayerView();
+            layersController.overlayGrid();
         }
     }
 
@@ -69,7 +89,8 @@ public class PaneController {
             // canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
             activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, CANVAS_SIZE);
             view.getActiveView().update(canvas.getActiveLayer().getImage());
-            overlayGrid();
+
+            layersController.updateLayerView();
         }
     }
 
@@ -81,17 +102,19 @@ public class PaneController {
         // canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
         activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, CANVAS_SIZE);
         view.getActiveView().update(canvas.getActiveLayer().getImage());
-        overlayGrid();
+
+        layersController.updateLayerView();
     }
 
-    private void overlayGrid() {
-        GraphicsContext activeViewGraphics = view.getActiveView().getGraphics();
+    public void overlayGrid() {
+        GraphicsContext gridGraphics = grid.getGraphicsContext2D();
+        gridGraphics.setLineWidth(0.2);
 
         for (int row = 0; row <= VIEW_SIZE; row += SCALE) {
-            activeViewGraphics.strokeLine(0, row, VIEW_SIZE, row);
+            gridGraphics.strokeLine(0, row, VIEW_SIZE, row);
         }
         for (int column = 0; column <= VIEW_SIZE; column += SCALE) {
-            activeViewGraphics.strokeLine(column, 0, column, VIEW_SIZE);
+            gridGraphics.strokeLine(column, 0, column, VIEW_SIZE);
         }
     }
 
