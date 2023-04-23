@@ -27,6 +27,11 @@
                <Tooltip text="Empty Tooltip" />
             </tooltip>
          </RadioButton>
+         <RadioButton mnemonicParsing="false" onAction="#selectPaintBucket" text="PaintBucket" toggleGroup="$Tools">
+            <tooltip>
+               <Tooltip text="Empty Tooltip" />
+            </tooltip>
+         </RadioButton>
       </children>
    </VBox>
     <Pane fx:id="pane" onKeyPressed="#keyPressed" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed" prefHeight="640.0" prefWidth="640.0" />

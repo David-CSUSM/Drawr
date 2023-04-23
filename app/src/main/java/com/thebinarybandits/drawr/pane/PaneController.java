@@ -5,6 +5,8 @@ import com.thebinarybandits.drawr.pixelcanvasviewer.PixelCanvasViewer;
 import com.thebinarybandits.drawr.tools.Tool;
 import com.thebinarybandits.drawr.tools.Pen;
 import com.thebinarybandits.drawr.tools.Eraser;
+import com.thebinarybandits.drawr.tools.PaintBucket;
+
 import javafx.fxml.FXML;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
@@ -65,7 +67,7 @@ public class PaneController {
 
         if (inBoundsHorizontal && inBoundsVertical) {
             // canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
-            activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON);
+            activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, SCALE, CANVAS_SIZE);
             view.getActiveView().update(canvas.getActiveLayer().getImage());
             overlayGrid();
         }
@@ -77,7 +79,7 @@ public class PaneController {
         int scaledY = (int) event.getY() / SCALE;
 
         // canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
-        activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON);
+        activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, SCALE, CANVAS_SIZE);
         view.getActiveView().update(canvas.getActiveLayer().getImage());
         overlayGrid();
     }
@@ -101,5 +103,10 @@ public class PaneController {
     @FXML
     void selectPen(ActionEvent event) {
         activeTool = new Pen();
+    }
+
+    @FXML
+    void selectPaintBucket(ActionEvent event) {
+        activeTool = new PaintBucket();
     }
 }

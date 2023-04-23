@@ -3,6 +3,7 @@ package com.thebinarybandits.drawr.pixelcanvas;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
 
 public class Layer {
     private final WritableImage image;
@@ -36,5 +37,9 @@ public class Layer {
 
     public WritableImage getImage() {
         return image;
+    }
+
+    public Color getPixelData(int x, int y) {
+        return ((Image) image).getPixelReader().getColor(x, y);
     }
 }
