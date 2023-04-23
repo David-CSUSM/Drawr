@@ -56,6 +56,7 @@ public class PixelCanvas {
     public void createNewLayer() {
         int size = (int) layers.get(0).getImage().getWidth();
         layers.add(factory.getNewLayer(size));
+        ++layerIndex;
     }
 
     public Layer getActiveLayer() {
@@ -70,7 +71,6 @@ public class PixelCanvas {
 
     public Layer getPreviousLayer() {
         if (layerIndex - 1 < 0) return null;
-
         return layers.get(--layerIndex);
     }
 }

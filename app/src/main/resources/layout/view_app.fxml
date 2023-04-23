@@ -25,12 +25,12 @@
         </MenuBar>
     </top>
     <left>
-        <fx:include source="view_tools.fxml"/>
+        <fx:include fx:id="tools" source="view_tools.fxml"/>
     </left>
     <right>
-        <fx:include source="view_layers.fxml"/>
+        <fx:include fx:id="layers" source="view_layers.fxml"/>
     </right>
     <center>
-        <fx:include source="view_pane.fxml"/>
+        <fx:include fx:id="pane" source="view_pane.fxml"/>
     </center>
 </BorderPane>
