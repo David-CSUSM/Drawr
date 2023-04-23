@@ -2,12 +2,17 @@ package com.thebinarybandits.drawr.pane;
 
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 import com.thebinarybandits.drawr.pixelcanvasviewer.PixelCanvasViewer;
+import com.thebinarybandits.drawr.tools.Tool;
+import com.thebinarybandits.drawr.tools.Pen;
+import com.thebinarybandits.drawr.tools.Eraser;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.event.ActionEvent;
+import javafx.scene.control.ToggleGroup;
 
 public class PaneController {
 
@@ -19,6 +24,11 @@ public class PaneController {
 
     private PixelCanvas canvas;
     private PixelCanvasViewer view;
+
+    private Tool activeTool;
+
+    @FXML
+    private ToggleGroup Tools;
 
     @FXML
     public void initialize() {
@@ -32,6 +42,8 @@ public class PaneController {
         SCALE = VIEW_SIZE / CANVAS_SIZE;
 
         overlayGrid();
+
+        activeTool = new Pen();
     }
 
     @FXML
@@ -52,7 +64,8 @@ public class PaneController {
         boolean inBoundsVertical = scaledY >= 0 && scaledY < CANVAS_SIZE;
 
         if (inBoundsHorizontal && inBoundsVertical) {
-            canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
+            // canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
+            activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON);
             view.getActiveView().update(canvas.getActiveLayer().getImage());
             overlayGrid();
         }
@@ -63,7 +76,8 @@ public class PaneController {
         int scaledX = (int) event.getX() / SCALE;
         int scaledY = (int) event.getY() / SCALE;
 
-        canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
+        // canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
+        activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON);
         view.getActiveView().update(canvas.getActiveLayer().getImage());
         overlayGrid();
     }
@@ -77,5 +91,15 @@ public class PaneController {
         for (int column = 0; column <= VIEW_SIZE; column += SCALE) {
             activeViewGraphics.strokeLine(column, 0, column, VIEW_SIZE);
         }
+    }
+
+    @FXML
+    void selectEraser(ActionEvent event) {
+        activeTool = new Eraser();
+    }
+
+    @FXML
+    void selectPen(ActionEvent event) {
+        activeTool = new Pen();
     }
 }

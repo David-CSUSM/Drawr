@@ -22,6 +22,10 @@ public class Layer {
         imageWriter.setColor(x, y, color);
     }
 
+    public void erase(int x, int y) {
+        imageWriter.setArgb(x, y, 0);
+    }
+
     public void clear() {
         for (int row = 0; row < image.getWidth(); ++row) {
             for (int column = 0; column < image.getHeight(); ++column) {
