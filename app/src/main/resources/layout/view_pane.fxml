@@ -1,38 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
 
 <HBox alignment="CENTER" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thebinarybandits.drawr.pane.PaneController">
     <padding>
         <Insets bottom="33.0" left="33.0" right="33.0" top="33.0" />
     </padding>
-   <VBox prefHeight="200.0" prefWidth="100.0">
-      <children>
-         <RadioButton mnemonicParsing="false" onAction="#selectPen" selected="true" text="Pen">
-            <toggleGroup>
-               <ToggleGroup fx:id="Tools" />
-            </toggleGroup>
-            <tooltip>
-               <Tooltip text="Empty Tooltip" />
-            </tooltip>
-         </RadioButton>
-         <RadioButton mnemonicParsing="false" onAction="#selectEraser" text="Eraser" toggleGroup="$Tools">
-            <tooltip>
-               <Tooltip text="Empty Tooltip" />
-            </tooltip>
-         </RadioButton>
-         <RadioButton mnemonicParsing="false" onAction="#selectPaintBucket" text="PaintBucket" toggleGroup="$Tools">
-            <tooltip>
-               <Tooltip text="Empty Tooltip" />
-            </tooltip>
-         </RadioButton>
-      </children>
-   </VBox>
     <Pane fx:id="pane" onKeyPressed="#keyPressed" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed" prefHeight="640.0" prefWidth="640.0" />
 </HBox>

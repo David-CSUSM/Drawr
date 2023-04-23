@@ -1,12 +1,9 @@
 package com.thebinarybandits.drawr.pane;
 
 import com.thebinarybandits.drawr.layers.LayersController;
+import com.thebinarybandits.drawr.tools.ToolsController;
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 import com.thebinarybandits.drawr.pixelcanvasviewer.PixelCanvasViewer;
-import com.thebinarybandits.drawr.tools.Tool;
-import com.thebinarybandits.drawr.tools.Pen;
-import com.thebinarybandits.drawr.tools.Eraser;
-import com.thebinarybandits.drawr.tools.PaintBucket;
 
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -15,7 +12,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.event.ActionEvent;
 import javafx.scene.control.ToggleGroup;
 
 public class PaneController {
@@ -24,15 +20,13 @@ public class PaneController {
     private Pane pane;
     private Canvas grid;
     private LayersController layersController;
+    private ToolsController toolsController;
 
     private PixelCanvas canvas;
     private PixelCanvasViewer view;
     private int CANVAS_SIZE;
     private int VIEW_SIZE;
     private int SCALE;
-
-
-    private Tool activeTool;
 
     @FXML
     private ToggleGroup Tools;
@@ -53,12 +47,14 @@ public class PaneController {
         grid.toFront();
 
         overlayGrid();
-
-        activeTool = new Pen();
     }
 
     public void setLayersController(LayersController controller) {
         layersController = controller;
+    }
+
+    public void setToolsController(ToolsController controller) {
+        toolsController = controller;
     }
 
     public void addPixelViewer(Canvas view) {
@@ -86,8 +82,7 @@ public class PaneController {
         boolean inBoundsVertical = scaledY >= 0 && scaledY < CANVAS_SIZE;
 
         if (inBoundsHorizontal && inBoundsVertical) {
-            // canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
-            activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, CANVAS_SIZE);
+            toolsController.getActiveTool().useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, CANVAS_SIZE);
             view.getActiveView().update(canvas.getActiveLayer().getImage());
 
             layersController.updateLayerView();
@@ -99,8 +94,7 @@ public class PaneController {
         int scaledX = (int) event.getX() / SCALE;
         int scaledY = (int) event.getY() / SCALE;
 
-        // canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
-        activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, CANVAS_SIZE);
+        toolsController.getActiveTool().useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, CANVAS_SIZE);
         view.getActiveView().update(canvas.getActiveLayer().getImage());
 
         layersController.updateLayerView();
@@ -116,20 +110,5 @@ public class PaneController {
         for (int column = 0; column <= VIEW_SIZE; column += SCALE) {
             gridGraphics.strokeLine(column, 0, column, VIEW_SIZE);
         }
-    }
-
-    @FXML
-    void selectEraser(ActionEvent event) {
-        activeTool = new Eraser();
-    }
-
-    @FXML
-    void selectPen(ActionEvent event) {
-        activeTool = new Pen();
-    }
-
-    @FXML
-    void selectPaintBucket(ActionEvent event) {
-        activeTool = new PaintBucket();
     }
 }

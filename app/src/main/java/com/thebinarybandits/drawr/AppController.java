@@ -25,6 +25,7 @@ public class AppController {
     public void initialize() {
         paneController.setLayersController(layersController);
         layersController.setPaneController(paneController);
+        paneController.setToolsController(toolsController);
     }
 
     @FXML
