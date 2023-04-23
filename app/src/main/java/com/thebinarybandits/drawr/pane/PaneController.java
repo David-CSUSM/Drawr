@@ -67,7 +67,7 @@ public class PaneController {
 
         if (inBoundsHorizontal && inBoundsVertical) {
             // canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
-            activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, SCALE, CANVAS_SIZE);
+            activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, CANVAS_SIZE);
             view.getActiveView().update(canvas.getActiveLayer().getImage());
             overlayGrid();
         }
@@ -79,7 +79,7 @@ public class PaneController {
         int scaledY = (int) event.getY() / SCALE;
 
         // canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
-        activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, SCALE, CANVAS_SIZE);
+        activeTool.useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, CANVAS_SIZE);
         view.getActiveView().update(canvas.getActiveLayer().getImage());
         overlayGrid();
     }
