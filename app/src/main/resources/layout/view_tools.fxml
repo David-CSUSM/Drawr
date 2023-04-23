@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox prefWidth="150.0" style="-fx-background-color: #d2d2d2;" BorderPane.alignment="CENTER"
-      xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.thebinarybandits.drawr.tools.ToolsController"/>
+<VBox prefWidth="150.0" style="-fx-background-color: #d2d2d2;" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thebinarybandits.drawr.tools.ToolsController">
+   <children>
+      <RadioButton mnemonicParsing="false" onAction="#penSelected" selected="true" text="Pen">
+         <toggleGroup>
+            <ToggleGroup fx:id="Tools" />
+         </toggleGroup>
+         <tooltip>
+            <Tooltip text="Empty Tooltip" />
+         </tooltip>
+      </RadioButton>
+      <RadioButton mnemonicParsing="false" onAction="#eraserSelected" text="Eraser" toggleGroup="$Tools">
+         <tooltip>
+            <Tooltip text="Empty Tooltip" />
+         </tooltip></RadioButton>
+      <RadioButton mnemonicParsing="false" onAction="#paintBucketSelected" text="PaintBucket" toggleGroup="$Tools">
+         <tooltip>
+            <Tooltip text="Empty Tooltip" />
+         </tooltip>
+      </RadioButton>
+   </children>
+</VBox>

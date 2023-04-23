@@ -1,8 +1,10 @@
 package com.thebinarybandits.drawr.pane;
 
 import com.thebinarybandits.drawr.layers.LayersController;
+import com.thebinarybandits.drawr.tools.ToolsController;
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 import com.thebinarybandits.drawr.pixelcanvasviewer.PixelCanvasViewer;
+
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -10,6 +12,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.control.ToggleGroup;
 
 public class PaneController {
 
@@ -17,6 +20,7 @@ public class PaneController {
     private Pane pane;
     private Canvas grid;
     private LayersController layersController;
+    private ToolsController toolsController;
 
     private PixelCanvas canvas;
     private PixelCanvasViewer view;
@@ -24,6 +28,8 @@ public class PaneController {
     private int VIEW_SIZE;
     private int SCALE;
 
+    @FXML
+    private ToggleGroup Tools;
 
     @FXML
     public void initialize() {
@@ -45,6 +51,10 @@ public class PaneController {
 
     public void setLayersController(LayersController controller) {
         layersController = controller;
+    }
+
+    public void setToolsController(ToolsController controller) {
+        toolsController = controller;
     }
 
     public void addPixelViewer(Canvas view) {
@@ -72,7 +82,7 @@ public class PaneController {
         boolean inBoundsVertical = scaledY >= 0 && scaledY < CANVAS_SIZE;
 
         if (inBoundsHorizontal && inBoundsVertical) {
-            canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
+            toolsController.getActiveTool().useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, CANVAS_SIZE);
             view.getActiveView().update(canvas.getActiveLayer().getImage());
 
             layersController.updateLayerView();
@@ -84,7 +94,7 @@ public class PaneController {
         int scaledX = (int) event.getX() / SCALE;
         int scaledY = (int) event.getY() / SCALE;
 
-        canvas.getActiveLayer().draw(scaledX, scaledY, Color.SALMON);
+        toolsController.getActiveTool().useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, CANVAS_SIZE);
         view.getActiveView().update(canvas.getActiveLayer().getImage());
 
         layersController.updateLayerView();
