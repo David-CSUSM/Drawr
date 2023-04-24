@@ -11,7 +11,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.control.ToggleGroup;
 
 public class PaneController {
@@ -82,7 +81,7 @@ public class PaneController {
         boolean inBoundsVertical = scaledY >= 0 && scaledY < CANVAS_SIZE;
 
         if (inBoundsHorizontal && inBoundsVertical) {
-            toolsController.getActiveTool().useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, CANVAS_SIZE);
+            toolsController.getActiveTool().useTool(canvas.getActiveLayer(), scaledX, scaledY, toolsController.getSelectedColor(), CANVAS_SIZE);
             view.getActiveView().update(canvas.getActiveLayer().getImage());
 
             layersController.updateLayerView();
@@ -94,7 +93,7 @@ public class PaneController {
         int scaledX = (int) event.getX() / SCALE;
         int scaledY = (int) event.getY() / SCALE;
 
-        toolsController.getActiveTool().useTool(canvas.getActiveLayer(), scaledX, scaledY, Color.SALMON, CANVAS_SIZE);
+        toolsController.getActiveTool().useTool(canvas.getActiveLayer(), scaledX, scaledY, toolsController.getSelectedColor(), CANVAS_SIZE);
         view.getActiveView().update(canvas.getActiveLayer().getImage());
 
         layersController.updateLayerView();
