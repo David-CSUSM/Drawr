@@ -86,7 +86,33 @@ public class AppController {
 
     @FXML
     void saveProject(ActionEvent event) {
-
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save As");
+    
+        // Show the dialog and wait for user response
+        int result = fileChooser.showSaveDialog(null);
+    
+        if (result == JFileChooser.APPROVE_OPTION) {
+            // Get the selected file
+            File selectedFile = fileChooser.getSelectedFile();
+    
+            // Create a BufferedImage object of the same size as the pixel canvas
+            BufferedImage image;
+                //todo
+    
+            // Get the Graphics object of the BufferedImage
+            //todo
+    
+            // Paint the pixel canvas onto the BufferedImage
+            //todo
+    
+            try {
+                // Write the BufferedImage to the selected file
+                ImageIO.write(image, "png", selectedFile);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     @FXML
