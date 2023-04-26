@@ -85,7 +85,7 @@ public class AppController {
         int result = fileChooser.showOpenDialog(null);
     
         if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
+            File selectedFile = fileChooser.getSelectedFile(); // need to enfore choosing only '.drawr' file
 
             FileInputStream fileIn = new FileInputStream(selectedFile.toString());
             ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -157,7 +157,7 @@ public class AppController {
             ArrayList<String[][]> layersArrayList = new ArrayList<String[][]>();
             layersArrayList = PixelCanvas.getInstance().getLayersData();
 
-            FileOutputStream fileOut = new FileOutputStream(selectedFile.toString());
+            FileOutputStream fileOut = new FileOutputStream(selectedFile.toString()); // need to enfore saving only as '.drawr' file
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(layersArrayList);
             out.close();
