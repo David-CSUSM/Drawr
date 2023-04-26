@@ -10,6 +10,7 @@ import com.thebinarybandits.drawr.layers.LayersController;
 import com.thebinarybandits.drawr.pane.PaneController;
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 import com.thebinarybandits.drawr.pixelcanvasviewer.PixelCanvasViewer;
+import com.thebinarybandits.drawr.pixelcanvasviewer.PixelViewer;
 import com.thebinarybandits.drawr.tools.ToolsController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,8 +18,16 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.WritableImage;
+//import javafx.embed.swing.SwingFXUtils; 
+import javafx.scene.image.Image;
+import java.awt.image.BufferedImage;
+
+import javax.swing.UIManager.*;
 
 public class AppController {
+    
+
     @FXML
     private Parent tools;
     @FXML
@@ -41,7 +50,7 @@ public class AppController {
 
     @FXML
     void newProject(ActionEvent event) {
-
+        
         //popup window to alert user that creating a new project will cause unsaved changes to be lost
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle("New Project");
@@ -52,7 +61,13 @@ public class AppController {
 
         if (result.isPresent() && result.get() == ButtonType.OK){
             // user clicked OK, reset the canvas
-            //TODO
+            PixelCanvas.getInstance().resetLayersAndIndex();
+            PixelCanvasViewer.getInstance().resetViewersAndIndex();
+            PixelCanvas.getInstance().getActiveLayer();
+            PixelCanvasViewer.getInstance().getActiveView();
+            layersController.updateLayerView();
+            paneController.addPixelViewer(layersController.getPixelCanvasViewerView().getActiveView().getView());
+            
         } else {
             // user clicked Cancel, do nothing
         }
@@ -60,7 +75,8 @@ public class AppController {
     
 
     @FXML
-    void openProject(ActionEvent event) {
+    void openProject(ActionEvent event) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Choose a File");
     
@@ -74,7 +90,7 @@ public class AppController {
     
                 // Load the pixel art image
                 BufferedImage image = ImageIO.read(selectedFile);
-    
+                
                 // Process the pixel art image
                 //TODO
     
@@ -85,19 +101,28 @@ public class AppController {
     }
 
     @FXML
-    void saveProject(ActionEvent event) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Save As");
+    void saveProjectAs(ActionEvent event) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {;
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     
+        JFileChooser fileChooser = new JFileChooser();
         // Show the dialog and wait for user response
         int result = fileChooser.showSaveDialog(null);
+
+        WritableImage canvasImage = PixelCanvas.getInstance().getActiveLayer().getImage();
+
+        javafx.scene.image.WritableImage writableImage = new javafx.scene.image.WritableImage(
+            (int) canvasImage.getWidth(),
+            (int) canvasImage.getHeight()
+    );
+
+      //  BufferedImage buffedImage = SwingFXUtils.fromFXImage(canvasImage, null);
     
         if (result == JFileChooser.APPROVE_OPTION) {
             // Get the selected file
             File selectedFile = fileChooser.getSelectedFile();
     
             // Create a BufferedImage object of the same size as the pixel canvas
-            BufferedImage image;
+            //BufferedImage image = new BufferedImage(PixelCanvas.getInstance().getHeight(),PixelCanvas.getInstance().getHeight(), 0);
                 //todo
     
             // Get the Graphics object of the BufferedImage
@@ -106,17 +131,17 @@ public class AppController {
             // Paint the pixel canvas onto the BufferedImage
             //todo
     
-            try {
+            //try {
                 // Write the BufferedImage to the selected file
-                ImageIO.write(image, "png", selectedFile);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+               // ImageIO.write(image, "png", selectedFile);
+           // } //catch (IOException ex) {
+              //  ex.printStackTrace();
+           // }
         }
     }
 
     @FXML
-    void saveProjectAs(ActionEvent event) {
+    void saveProject(ActionEvent event) {
 
     }
 }
