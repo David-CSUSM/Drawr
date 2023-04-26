@@ -1,6 +1,7 @@
 package com.thebinarybandits.drawr.pixelcanvasviewer;
 
 import java.util.ArrayList;
+import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 
 // singleton pattern
 public class PixelCanvasViewer {
@@ -82,5 +83,15 @@ public class PixelCanvasViewer {
         if (viewerIndex - 1 < 0) return null;
 
         return viewers.get(--viewerIndex);
+    }
+
+    public void setViewersData() {
+        // pass writeableimage from pixelcanvas's layers into each pixelviwer.update(writeableimage)
+        viewers.get(0).update(PixelCanvas.getInstance().getLayerAt(0).getImage());
+
+        for (int i=1; i < PixelCanvas.getInstance().getLayersSize(); i++) {
+            viewers.add(factory.getNewPixelViewer());
+            viewers.get(i).update(PixelCanvas.getInstance().getLayerAt(i).getImage());
+        }
     }
 }

@@ -22,6 +22,7 @@ import javafx.scene.image.WritableImage;
 //import javafx.embed.swing.SwingFXUtils; 
 import javafx.scene.image.Image;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.UIManager.*;
 
@@ -75,7 +76,7 @@ public class AppController {
     
 
     @FXML
-    void openProject(ActionEvent event) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    void openProject(ActionEvent event) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Choose a File");
@@ -84,19 +85,21 @@ public class AppController {
         int result = fileChooser.showOpenDialog(null);
     
         if (result == JFileChooser.APPROVE_OPTION) {
-            try {
-                // Get the selected file
-                File selectedFile = fileChooser.getSelectedFile();
-    
-                // Load the pixel art image
-                BufferedImage image = ImageIO.read(selectedFile);
-                
-                // Process the pixel art image
-                //TODO
-    
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            File selectedFile = fileChooser.getSelectedFile(); // need to enfore choosing only '.drawr' file
+
+            FileInputStream fileIn = new FileInputStream(selectedFile.toString());
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            ArrayList<String[][]> layersArrayList = (ArrayList<String[][]>) in.readObject();
+            in.close();
+
+            PixelCanvas.getInstance().resetLayersAndIndex();
+            PixelCanvasViewer.getInstance().resetViewersAndIndex();
+
+            PixelCanvas.getInstance().setLayersData(layersArrayList);
+            PixelCanvasViewer.getInstance().setViewersData();
+
+            layersController.updateLayerView();
+            paneController.addPixelViewer(layersController.getPixelCanvasViewerView().getActiveView().getView());
         }
     }
 
@@ -141,7 +144,24 @@ public class AppController {
     }
 
     @FXML
-    void saveProject(ActionEvent event) {
+    void saveProject(ActionEvent event) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        JFileChooser fileChooser = new JFileChooser();
+    
+        // Show the dialog and wait for user response
+        int result = fileChooser.showOpenDialog(null);
+    
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
 
+            ArrayList<String[][]> layersArrayList = new ArrayList<String[][]>();
+            layersArrayList = PixelCanvas.getInstance().getLayersData();
+
+            FileOutputStream fileOut = new FileOutputStream(selectedFile.toString()); // need to enfore saving only as '.drawr' file
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(layersArrayList);
+            out.close();
+            fileOut.close();
+        }
     }
 }

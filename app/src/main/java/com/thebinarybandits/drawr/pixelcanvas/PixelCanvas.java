@@ -10,6 +10,8 @@ import com.thebinarybandits.drawr.pixelcanvasviewer.PixelCanvasViewer;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import java.util.ArrayList;
+import javafx.scene.paint.Color;
 
 // singleton pattern
 public class PixelCanvas {
@@ -90,5 +92,32 @@ public class PixelCanvas {
     public Layer getPreviousLayer() {
         if (layerIndex - 1 < 0) return null;
         return layers.get(--layerIndex);
+    }
+
+    public ArrayList<String[][]> getLayersData() {
+        ArrayList<String[][]> layersArrayList = new ArrayList<String[][]>();
+
+        for (int i = 0; i < layers.size(); i++) {
+            layersArrayList.add(layers.get(i).getImageData());
+        }
+        
+        return layersArrayList;
+    }
+
+    public void setLayersData(ArrayList<String[][]> layersArrayList) {
+        layers.get(0).setImageData(layersArrayList.get(0));
+
+        for (int i = 1; i < layersArrayList.size(); i++) {
+            layers.add(factory.getNewLayer());
+            layers.get(i).setImageData(layersArrayList.get(i));
+        }
+    }
+
+    public Layer getLayerAt(int i) {
+        return layers.get(i);
+    }
+
+    public int getLayersSize() {
+        return layers.size();
     }
 }

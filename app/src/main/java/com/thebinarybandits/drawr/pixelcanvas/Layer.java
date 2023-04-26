@@ -42,4 +42,22 @@ public class Layer {
     public Color getPixelData(int x, int y) {
         return ((Image) image).getPixelReader().getColor(x, y);
     }
+
+    public String[][] getImageData() {
+        String[][] imageArray = new String[16][16];
+
+        for (int x = 0; x < 16; x++)
+            for (int y = 0; y < 16; y++) {
+                imageArray[x][y] = this.getPixelData(x, y).toString();
+            }
+
+        return imageArray;
+    }
+
+    public void setImageData(String[][] colorStrings) {
+        for (int x = 0; x < 16; x++)
+            for (int y = 0; y < 16; y++) {
+                this.draw(x, y, Color.valueOf(colorStrings[x][y]));
+            }
+    }
 }
