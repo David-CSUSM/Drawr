@@ -11,7 +11,7 @@ import com.thebinarybandits.drawr.pane.PaneController;
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 import com.thebinarybandits.drawr.pixelcanvasviewer.PixelCanvasViewer;
 import com.thebinarybandits.drawr.pixelcanvasviewer.PixelViewer;
-import com.thebinarybandits.drawr.tools.ToolsController;
+import com.thebinarybandits.drawr.tools.ToolsController; 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -60,7 +60,7 @@ public class AppController {
 
 
         if (result.isPresent() && result.get() == ButtonType.OK){
-            // user clicked OK, reset the canvas
+            // user clicked OK, reset the PixelCanvas & PixelCanvasViewer
             PixelCanvas.getInstance().resetLayersAndIndex();
             PixelCanvasViewer.getInstance().resetViewersAndIndex();
             PixelCanvas.getInstance().getActiveLayer();
