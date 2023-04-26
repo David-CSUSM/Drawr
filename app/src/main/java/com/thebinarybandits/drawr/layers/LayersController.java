@@ -38,6 +38,10 @@ public class LayersController {
         paneController = controller;
     }
 
+    public PixelCanvasViewer getPixelCanvasViewerView(){
+        return view;
+    }
+
     @FXML
     void createLayer(ActionEvent event) {
         canvas.createNewLayer();

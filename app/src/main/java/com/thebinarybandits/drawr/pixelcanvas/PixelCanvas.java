@@ -1,6 +1,15 @@
 package com.thebinarybandits.drawr.pixelcanvas;
 
+import java.awt.Image;
 import java.util.ArrayList;
+
+import javax.swing.text.View;
+
+import com.thebinarybandits.drawr.pane.PaneController;
+import com.thebinarybandits.drawr.pixelcanvasviewer.PixelCanvasViewer;
+
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 
 // singleton pattern
 public class PixelCanvas {
@@ -20,7 +29,6 @@ public class PixelCanvas {
     private PixelCanvas(int size) {
         factory = new LayerFactory();
         layers = new ArrayList<>();
-
         layers.add(factory.getNewLayer(size));
         layerIndex = 0;
     }
@@ -49,9 +57,18 @@ public class PixelCanvas {
                 }
             }
         }
-
         return result;
     }
+    
+    public void resetLayersAndIndex()
+    {
+        for(Layer layer : layers)
+            layer.clear();
+        layers.clear();
+        layers.add(factory.getNewLayer());
+        layerIndex = 0;
+    }
+
 
     public void createNewLayer() {
         int size = (int) layers.get(0).getImage().getWidth();
@@ -62,6 +79,7 @@ public class PixelCanvas {
     public Layer getActiveLayer() {
         return layers.get(layerIndex);
     }
+
 
     public Layer getNextLayer() {
         if (layerIndex + 1 >= layers.size()) return null;
