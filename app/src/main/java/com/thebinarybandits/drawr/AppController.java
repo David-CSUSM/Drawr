@@ -77,20 +77,30 @@ public class AppController {
 
     @FXML
     void openProject(ActionEvent event) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        FileInputStream fileIn = new FileInputStream("test.drawr");
-        ObjectInputStream in = new ObjectInputStream(fileIn);
-        ArrayList<String[][]> layersArrayList = (ArrayList<String[][]>) in.readObject();
-        in.close();
-        fileIn.close();
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Choose a File");
+    
+        // Show the dialog and wait for user response
+        int result = fileChooser.showOpenDialog(null);
+    
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
 
-        PixelCanvas.getInstance().resetLayersAndIndex();
-        PixelCanvasViewer.getInstance().resetViewersAndIndex();
+            FileInputStream fileIn = new FileInputStream(selectedFile.toString());
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            ArrayList<String[][]> layersArrayList = (ArrayList<String[][]>) in.readObject();
+            in.close();
 
-        PixelCanvas.getInstance().setLayersData(layersArrayList);
-        PixelCanvasViewer.getInstance().setViewersData();
+            PixelCanvas.getInstance().resetLayersAndIndex();
+            PixelCanvasViewer.getInstance().resetViewersAndIndex();
 
-        layersController.updateLayerView();
-        paneController.addPixelViewer(layersController.getPixelCanvasViewerView().getActiveView().getView());
+            PixelCanvas.getInstance().setLayersData(layersArrayList);
+            PixelCanvasViewer.getInstance().setViewersData();
+
+            layersController.updateLayerView();
+            paneController.addPixelViewer(layersController.getPixelCanvasViewerView().getActiveView().getView());
+        }
     }
 
     @FXML
@@ -134,14 +144,24 @@ public class AppController {
     }
 
     @FXML
-    void saveProject(ActionEvent event) throws IOException{
-        ArrayList<String[][]> layersArrayList = new ArrayList<String[][]>();
-        layersArrayList = PixelCanvas.getInstance().getLayersData();
+    void saveProject(ActionEvent event) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        JFileChooser fileChooser = new JFileChooser();
+    
+        // Show the dialog and wait for user response
+        int result = fileChooser.showOpenDialog(null);
+    
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
 
-        FileOutputStream fileOut = new FileOutputStream("test.drawr");
-        ObjectOutputStream out = new ObjectOutputStream(fileOut);
-        out.writeObject(layersArrayList);
-        out.close();
-        fileOut.close();
+            ArrayList<String[][]> layersArrayList = new ArrayList<String[][]>();
+            layersArrayList = PixelCanvas.getInstance().getLayersData();
+
+            FileOutputStream fileOut = new FileOutputStream(selectedFile.toString());
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(layersArrayList);
+            out.close();
+            fileOut.close();
+        }
     }
 }
