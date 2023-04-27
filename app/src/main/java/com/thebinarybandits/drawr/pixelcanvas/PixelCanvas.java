@@ -1,38 +1,34 @@
 package com.thebinarybandits.drawr.pixelcanvas;
 
-import java.awt.Image;
-import java.util.ArrayList;
-
-import javax.swing.text.View;
-
-import com.thebinarybandits.drawr.pane.PaneController;
-import com.thebinarybandits.drawr.pixelcanvasviewer.PixelCanvasViewer;
-
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import java.util.ArrayList;
+import com.thebinarybandits.drawr.tools.Tool;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
 
 // singleton pattern
 public class PixelCanvas {
     private static volatile PixelCanvas instance;
-    private final LayerFactory factory;
-    private final ArrayList<Layer> layers;
-    private int layerIndex;
+    private int size;
+    private int viewSize;
+    private Tool tool;
+    private Color color;
+    private final ArrayList<PixelImage> layers;
+    private final ObservableList<PixelView> views;
+    private final PixelView layerView;
+    private int index;
+    public enum Direction { BACK, FORWARD }
 
     private PixelCanvas() {
-        factory = new LayerFactory();
+        size = 16;
+        viewSize = 640;
+        tool = null;
+        color = Color.BLACK;
         layers = new ArrayList<>();
-
-        layers.add(factory.getNewLayer());
-        layerIndex = 0;
-    }
-
-    private PixelCanvas(int size) {
-        factory = new LayerFactory();
-        layers = new ArrayList<>();
-        layers.add(factory.getNewLayer(size));
-        layerIndex = 0;
+        views = FXCollections.observableArrayList();
+        layerView = new PixelView(240);
+        index = 0;
     }
 
     public static PixelCanvas getInstance() {
@@ -49,75 +45,139 @@ public class PixelCanvas {
         return result;
     }
 
-    public static PixelCanvas getInstance(int size) {
-        PixelCanvas result = instance;
-        if (result == null) {
-            synchronized (PixelCanvas.class) {
-                result = instance;
-                if (result == null) {
-                    instance = result = new PixelCanvas(size);
-                }
-            }
-        }
-        return result;
+    public void initialize() {
+        layers.add(new PixelImage(size));
+        views.add(new PixelView(viewSize));
     }
-    
-    public void resetLayersAndIndex()
-    {
-        for(Layer layer : layers)
-            layer.clear();
+
+    public void reset() {
+        size = 16;
+        viewSize = 640;
+        tool = null;
+        color = Color.BLACK;
         layers.clear();
-        layers.add(factory.getNewLayer());
-        layerIndex = 0;
+        views.clear();
+        layerView.clear();
+        index = 0;
     }
 
-
-    public void createNewLayer() {
-        int size = (int) layers.get(0).getImage().getWidth();
-        layers.add(factory.getNewLayer(size));
-        ++layerIndex;
+    public void setSize(int size) {
+        this.size = size;
     }
 
-    public Layer getActiveLayer() {
-        return layers.get(layerIndex);
+    public void setViewSize(int viewSize) {
+        this.viewSize = viewSize;
     }
 
-
-    public Layer getNextLayer() {
-        if (layerIndex + 1 >= layers.size()) return null;
-
-        return layers.get(++layerIndex);
+    public void setTool(Tool tool) {
+        this.tool = tool;
     }
 
-    public Layer getPreviousLayer() {
-        if (layerIndex - 1 < 0) return null;
-        return layers.get(--layerIndex);
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getViewSize() {
+        return viewSize;
+    }
+
+    public int getScale() {
+        return viewSize / size;
+    }
+
+    public PixelImage getImage() {
+        return layers.get(index);
+    }
+
+    public PixelView getView() {
+        return views.get(index);
+    }
+
+    public PixelView getLayerView() {
+        return layerView;
+    }
+
+    public ArrayList<PixelImage> getLayers() {
+        return layers;
+    }
+
+    public ObservableList<PixelView> getViews() {
+        return views;
+    }
+
+    public void draw(int x, int y) {
+        if (tool != null && layers.size() > 0) {
+            tool.useTool(layers.get(index), x, y, color, size);
+            getView().update(getImage());
+
+            layerView.update(getImage());
+        }
+    }
+
+    public void clear() {
+        layers.get(index).clear();
+        views.get(index).clear();
+        layerView.clear();
+    }
+
+    public void createLayer() {
+        if (index == layers.size() - 1) {
+            ++index;
+            layers.add(new PixelImage(size));
+            views.add(new PixelView(viewSize));
+
+        } else {
+            ++index;
+            layers.add(index, new PixelImage(size));
+            views.add(index, new PixelView(viewSize));
+        }
+
+        layerView.update(getImage());
+    }
+
+    public void changeLayer(int index) {
+        boolean inBounds = index >= 0 && index < layers.size() - 1;
+
+        if (inBounds) {
+            this.index = index;
+        }
+    }
+
+    public void changeLayer(Direction location) {
+        if (location == Direction.BACK && index > 0) {
+            --index;
+
+        } else if (location == Direction.FORWARD && index < layers.size() - 1) {
+            ++index;
+        }
+
+        layerView.update(getImage());
     }
 
     public ArrayList<String[][]> getLayersData() {
-        ArrayList<String[][]> layersArrayList = new ArrayList<String[][]>();
+        ArrayList<String[][]> layersArrayList = new ArrayList<>();
 
-        for (int i = 0; i < layers.size(); i++) {
-            layersArrayList.add(layers.get(i).getImageData());
+        for (PixelImage layer : layers) {
+            layersArrayList.add(layer.getImageData());
         }
         
         return layersArrayList;
     }
 
     public void setLayersData(ArrayList<String[][]> layersArrayList) {
-        layers.get(0).setImageData(layersArrayList.get(0));
+        getImage().setImageData(layersArrayList.get(0));
+        getView().update(getImage());
 
         for (int i = 1; i < layersArrayList.size(); i++) {
-            layers.add(factory.getNewLayer());
-            layers.get(i).setImageData(layersArrayList.get(i));
+            createLayer();
+            getImage().setImageData(layersArrayList.get(i));
+            getView().update(getImage());
         }
-    }
 
-    public Layer getLayerAt(int i) {
-        return layers.get(i);
-    }
-
-    public int getLayersSize() {
-        return layers.size();
+        layerView.update(getImage());
     }
 }
