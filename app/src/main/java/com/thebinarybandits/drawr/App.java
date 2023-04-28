@@ -16,6 +16,8 @@ public class App extends Application {
         stage.setTitle("Drawr");
         stage.getIcons().add(new Image("/drawable/ic_logo.png"));
         stage.setScene(scene);
+        String css = this.getClass().getResource("/styles/style.css").toExternalForm(); 
+        scene.getStylesheets().add(css);
         stage.show();
     }
 
