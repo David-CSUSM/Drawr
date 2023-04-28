@@ -2,6 +2,7 @@ package com.thebinarybandits.drawr;
 
 import java.io.*;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 import javafx.event.ActionEvent;
@@ -44,18 +45,30 @@ public class AppController {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Choose a File");
-
+    
+        // Set file extension filter to only show '.drawr' files
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Drawr Files (*.drawr)", "drawr");
+        fileChooser.setFileFilter(filter);
+    
         // Show the dialog and wait for user response
         int result = fileChooser.showOpenDialog(null);
-
+    
         if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile(); // need to enfore choosing only '.drawr' file
-
+            File selectedFile = fileChooser.getSelectedFile();
+    
+            // Check if selected file is a '.drawr' file
+            if (!selectedFile.getName().endsWith(".drawr")) {
+                // Display an error message if selected file is not a '.drawr' file
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Please choose a '.drawr' file.");
+                alert.showAndWait();
+                return;
+            }
+    
             FileInputStream fileIn = new FileInputStream(selectedFile.toString());
             ObjectInputStream in = new ObjectInputStream(fileIn);
             ArrayList<String[][]> layersArrayList = (ArrayList<String[][]>) in.readObject();
             in.close();
-
+    
             // if we allow users to change canvas size
             // then we would have to initialize the canvas based on the file's canvas size
             canvas.reset();
@@ -63,60 +76,42 @@ public class AppController {
             canvas.setLayersData(layersArrayList);
         }
     }
+    
 
     @FXML
     void saveProjectAs(ActionEvent event) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        JFileChooser fileChooser = new JFileChooser();
-        // Show the dialog and wait for user response
-        int result = fileChooser.showSaveDialog(null);
-
-        WritableImage canvasImage = canvas.getImage();
-        WritableImage writableImage = new WritableImage((int) canvasImage.getWidth(), (int) canvasImage.getHeight());
-
-        //  BufferedImage buffedImage = SwingFXUtils.fromFXImage(canvasImage, null);
-
-        if (result == JFileChooser.APPROVE_OPTION) {
-            // Get the selected file
-            File selectedFile = fileChooser.getSelectedFile();
-
-            // Create a BufferedImage object of the same size as the pixel canvas
-            //BufferedImage image = new BufferedImage(PixelCanvas.getInstance().getHeight(),PixelCanvas.getInstance().getHeight(), 0);
-            //todo
-
-            // Get the Graphics object of the BufferedImage
-            //todo
-
-            // Paint the pixel canvas onto the BufferedImage
-            //todo
-
-            //try {
-            // Write the BufferedImage to the selected file
-            // ImageIO.write(image, "png", selectedFile);
-            // } //catch (IOException ex) {
-            //  ex.printStackTrace();
-            // }
-        }
+        
     }
 
     @FXML
     void saveProject(ActionEvent event) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFileChooser fileChooser = new JFileChooser();
-
+    
+        // Set file extension filter to only show '.drawr' files
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Drawr Files (*.drawr)", "drawr");
+        fileChooser.setFileFilter(filter);
+    
         // Show the dialog and wait for user response
-        int result = fileChooser.showOpenDialog(null);
-
+        int result = fileChooser.showSaveDialog(null);
+    
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-
+            
+            // Add '.drawr' extension if not already present
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.endsWith(".drawr")) {
+                selectedFile = new File(filePath + ".drawr");
+            }
+    
             ArrayList<String[][]> layersArrayList = canvas.getLayersData();
-
-            FileOutputStream fileOut = new FileOutputStream(selectedFile.toString()); // need to enfore saving only as '.drawr' file
+    
+            FileOutputStream fileOut = new FileOutputStream(selectedFile.toString());
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(layersArrayList);
             out.close();
             fileOut.close();
         }
     }
+    
 }
