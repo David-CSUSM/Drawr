@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 // singleton pattern
 public class PixelCanvas {
@@ -15,10 +16,11 @@ public class PixelCanvas {
     private Tool tool;
     private Color color;
     private final ArrayList<PixelImage> layers;
-    private final ObservableList<PixelView> views;
-    private final PixelView layerView;
+    private final PixelView canvasView;
+    private final ObservableList<PixelView> layerViews;
     private int index;
-    public enum Direction { BACK, FORWARD }
+
+    public enum Direction {UP, DOWN}
 
     private PixelCanvas() {
         size = 16;
@@ -26,9 +28,9 @@ public class PixelCanvas {
         tool = null;
         color = Color.BLACK;
         layers = new ArrayList<>();
-        views = FXCollections.observableArrayList();
-        layerView = new PixelView(240);
-        index = 0;
+        canvasView = new PixelView(viewSize);
+        layerViews = FXCollections.observableArrayList();
+        index = -1;
     }
 
     public static PixelCanvas getInstance() {
@@ -46,8 +48,9 @@ public class PixelCanvas {
     }
 
     public void initialize() {
+        ++index;
         layers.add(new PixelImage(size));
-        views.add(new PixelView(viewSize));
+        layerViews.add(new PixelView(240));
     }
 
     public void reset() {
@@ -56,9 +59,9 @@ public class PixelCanvas {
         tool = null;
         color = Color.BLACK;
         layers.clear();
-        views.clear();
-        layerView.clear();
-        index = 0;
+        canvasView.clear();
+        layerViews.clear();
+        index = -1;
     }
 
     public void setSize(int size) {
@@ -93,69 +96,85 @@ public class PixelCanvas {
         return layers.get(index);
     }
 
-    public PixelView getView() {
-        return views.get(index);
+    public PixelView getCanvasView() {
+        return canvasView;
     }
 
     public PixelView getLayerView() {
-        return layerView;
+        return layerViews.get(index);
     }
 
     public ArrayList<PixelImage> getLayers() {
         return layers;
     }
 
-    public ObservableList<PixelView> getViews() {
-        return views;
+    public ObservableList<PixelView> getLayerViews() {
+        return layerViews;
     }
 
     public void draw(int x, int y) {
         if (tool != null && layers.size() > 0) {
             tool.useTool(layers.get(index), x, y, color, size);
-            getView().update(getImage());
+            canvasView.update(getImage());
 
-            layerView.update(getImage());
+            getLayerView().update(getImage());
         }
     }
 
     public void clear() {
         layers.get(index).clear();
-        views.get(index).clear();
-        layerView.clear();
+        canvasView.clear();
+        layerViews.get(index).clear();
     }
 
     public void createLayer() {
         if (index == layers.size() - 1) {
             ++index;
             layers.add(new PixelImage(size));
-            views.add(new PixelView(viewSize));
+            layerViews.add(new PixelView(240));
 
         } else {
             ++index;
             layers.add(index, new PixelImage(size));
-            views.add(index, new PixelView(viewSize));
+            layerViews.add(index, new PixelView(240));
         }
 
-        layerView.update(getImage());
+        canvasView.update(getImage());
+    }
+
+    public void deleteLayer() {
+        if (layers.size() - 1 == 0) return;
+
+        layers.remove(getImage());
+        layerViews.remove(getLayerView());
+
+        canvasView.update(getImage());
     }
 
     public void changeLayer(int index) {
-        boolean inBounds = index >= 0 && index < layers.size() - 1;
+        this.index = index;
 
-        if (inBounds) {
-            this.index = index;
+        // only update the view if the canvas is initialized
+        if (index >= 0) {
+            canvasView.update(getImage());
         }
     }
 
-    public void changeLayer(Direction location) {
-        if (location == Direction.BACK && index > 0) {
-            --index;
+    public void swapLayer(Direction location) {
+        if (location == Direction.UP && index - 1 >= 0) {
+            PixelImage currentImage = layers.get(index);
+            layers.remove(currentImage);
+            layers.add(index - 1, currentImage);
 
-        } else if (location == Direction.FORWARD && index < layers.size() - 1) {
-            ++index;
+            Collections.swap(layerViews, index, index - 1);
+
+        } else if (location == Direction.DOWN && index + 1 <= layerViews.size() - 1) {
+            PixelImage nextImage = layers.get(index + 1);
+            layers.remove(nextImage);
+            layers.add(index, nextImage);
+
+            Collections.swap(layerViews, index, index + 1);
         }
-
-        layerView.update(getImage());
     }
 
     public ArrayList<String[][]> getLayersData() {
@@ -164,20 +183,20 @@ public class PixelCanvas {
         for (PixelImage layer : layers) {
             layersArrayList.add(layer.getImageData());
         }
-        
+
         return layersArrayList;
     }
 
     public void setLayersData(ArrayList<String[][]> layersArrayList) {
         getImage().setImageData(layersArrayList.get(0));
-        getView().update(getImage());
+        getCanvasView().update(getImage());
+        getLayerView().update(getImage());
 
         for (int i = 1; i < layersArrayList.size(); i++) {
             createLayer();
             getImage().setImageData(layersArrayList.get(i));
-            getView().update(getImage());
+            getCanvasView().update(getImage());
+            getLayerView().update(getImage());
         }
-
-        layerView.update(getImage());
     }
 }
