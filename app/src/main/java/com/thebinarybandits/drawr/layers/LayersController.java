@@ -1,5 +1,6 @@
 package com.thebinarybandits.drawr.layers;
 
+import com.thebinarybandits.drawr.encoder.GifManager;
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 import com.thebinarybandits.drawr.pixelcanvas.PixelView;
 import javafx.beans.binding.Binding;
@@ -10,13 +11,22 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Objects;
+
 public class LayersController {
     @FXML
     private ImageView animationView;
+    @FXML
+    private TextField delayField;
     @FXML
     private VBox layersContainer;
     private PixelCanvas canvas;
@@ -89,6 +99,17 @@ public class LayersController {
                 highlightSelection(layersContainer.getChildren().get(index.intValue()));
             }
         });
+
+        // filter user input to only accept int
+        delayField.setTextFormatter(new TextFormatter<Integer>(change -> {
+            String text = change.getControlNewText();
+
+            if (text.matches("\\d*")) {
+                return change;
+            }
+
+            return null;
+        }));
     }
 
     void highlightSelection(Node cell) {
@@ -136,7 +157,21 @@ public class LayersController {
     }
 
     @FXML
-    void previewAnimation(ActionEvent event) {
-        System.out.println("clicked previewAnimation");
+    void previewAnimation(ActionEvent event) throws IOException {
+        if ((delayField.getText().equals(""))) {
+            return;
+        }
+
+        FileOutputStream file = new FileOutputStream(Objects.requireNonNull(getClass().getResource("/drawable/preview.gif")).getPath());
+
+        GifManager gifManager = new GifManager(canvas.getLayers());
+        gifManager.setRepeat(3);
+        gifManager.setDelay(Integer.parseInt(delayField.getText()));
+        gifManager.setSize(240);
+        gifManager.start(file);
+
+        file.close();
+
+        animationView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/drawable/preview.gif"))));
     }
 }
