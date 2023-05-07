@@ -7,6 +7,8 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Stack;
+import com.thebinarybandits.drawr.misc.Pair;
 
 // singleton pattern
 public class PixelCanvas {
@@ -19,6 +21,9 @@ public class PixelCanvas {
     private final PixelView canvasView;
     private final ObservableList<PixelView> layerViews;
     private int index;
+    private Stack<Pair<ArrayList<String[][]>,Integer>> undo;
+    private Stack<Pair<ArrayList<String[][]>,Integer>> redo;
+    private static boolean DEBUG = true;
 
     public enum Direction {UP, DOWN}
 
@@ -31,6 +36,8 @@ public class PixelCanvas {
         canvasView = new PixelView(viewSize);
         layerViews = FXCollections.observableArrayList();
         index = -1;
+        undo = new Stack<Pair<ArrayList<String[][]>,Integer>>();
+        redo = new Stack<Pair<ArrayList<String[][]>,Integer>>();
     }
 
     public static PixelCanvas getInstance() {
@@ -62,6 +69,8 @@ public class PixelCanvas {
         canvasView.clear();
         layerViews.clear();
         index = -1;
+        undo = new Stack<Pair<ArrayList<String[][]>,Integer>>();
+        redo = new Stack<Pair<ArrayList<String[][]>,Integer>>();
     }
 
     public void setSize(int size) {
@@ -93,6 +102,8 @@ public class PixelCanvas {
     }
 
     public PixelImage getImage() {
+        if (DEBUG)
+            System.out.println("moving to index: " + this.index);
         return layers.get(index);
     }
 
@@ -114,6 +125,8 @@ public class PixelCanvas {
 
     public void draw(int x, int y) {
         if (tool != null && layers.size() > 0) {
+            pushUndo();
+
             tool.useTool(layers.get(index), x, y, color, size);
             canvasView.update(getImage());
 
@@ -128,6 +141,24 @@ public class PixelCanvas {
     }
 
     public void createLayer() {
+        pushUndo();
+
+        if (index == layers.size() - 1) {
+            ++index;
+            layers.add(new PixelImage(size));
+            layerViews.add(new PixelView(240));
+
+        } else {
+            ++index;
+            layers.add(index, new PixelImage(size));
+            layerViews.add(index, new PixelView(240));
+        }
+
+        canvasView.update(getImage());
+    }
+
+    // creates a layer and avoids pushing it onto the undo stack
+    private void createLayerInternal() {
         if (index == layers.size() - 1) {
             ++index;
             layers.add(new PixelImage(size));
@@ -144,6 +175,8 @@ public class PixelCanvas {
 
     public void deleteLayer() {
         if (layers.size() - 1 == 0) return;
+
+        pushUndo();
 
         layers.remove(getImage());
         layerViews.remove(getLayerView());
@@ -162,6 +195,8 @@ public class PixelCanvas {
 
     public void swapLayer(Direction location) {
         if (location == Direction.UP && index - 1 >= 0) {
+            pushUndo();
+
             PixelImage currentImage = layers.get(index);
             layers.remove(currentImage);
             layers.add(index - 1, currentImage);
@@ -169,6 +204,8 @@ public class PixelCanvas {
             Collections.swap(layerViews, index, index - 1);
 
         } else if (location == Direction.DOWN && index + 1 <= layerViews.size() - 1) {
+            pushUndo();
+            
             PixelImage nextImage = layers.get(index + 1);
             layers.remove(nextImage);
             layers.add(index, nextImage);
@@ -187,16 +224,71 @@ public class PixelCanvas {
         return layersArrayList;
     }
 
-    public void setLayersData(ArrayList<String[][]> layersArrayList) {
+    public void initLayersData(ArrayList<String[][]> layersArrayList) {
         getImage().setImageData(layersArrayList.get(0));
         getCanvasView().update(getImage());
         getLayerView().update(getImage());
 
         for (int i = 1; i < layersArrayList.size(); i++) {
-            createLayer();
+            createLayerInternal();
             getImage().setImageData(layersArrayList.get(i));
             getCanvasView().update(getImage());
             getLayerView().update(getImage());
+        }
+    }
+
+    // helper function for undo
+    // should probably change the name
+    private void setLayersData(ArrayList<String[][]> layersArraylist, int index) {
+        layers.clear();
+        layerViews.clear();
+
+        for (int i = 0; i < layersArraylist.size(); i++) {
+            createLayerInternal();
+            layers.get(i).setImageData(layersArraylist.get(i));
+            layerViews.get(i).update(layers.get(i));
+        }
+
+        changeLayer(index);
+    }
+
+    // pushes layersData onto the undo stack and clears redo stack
+    private void pushUndo() {
+        if (DEBUG)
+            System.out.println("***Function: pushUndo***");
+        undo.push(new Pair<ArrayList<String[][]>,Integer>(getLayersData(), index));
+        if (DEBUG)
+            System.out.println("undo stack size: " + undo.size());
+        redo.clear();
+        if (DEBUG)
+            System.out.println("redo stack size: " + redo.size());
+    }
+
+    public void undo() {
+        if (!undo.empty()) {
+            if (DEBUG)
+                System.out.println("***Function: undo***");
+            redo.push(new Pair<ArrayList<String[][]>,Integer>(getLayersData(), index));
+            if (DEBUG)
+                System.out.println("redo stack size: " + redo.size());
+            Pair<ArrayList<String[][]>,Integer> temp = undo.pop();
+            setLayersData(temp.x, temp.y);
+            if (DEBUG)
+                System.out.println("undo stack size: " + undo.size());
+        }
+    }
+
+    public void redo() {
+        if (!redo.empty()) {
+            if (DEBUG)
+                System.out.println("***Function: redo***");
+            undo.push(new Pair<ArrayList<String[][]>,Integer>(getLayersData(), index));
+            if (DEBUG)
+                System.out.println("undo stack size: " + undo.size());
+            Pair<ArrayList<String[][]>,Integer> temp = redo.pop();
+            setLayersData(temp.x, temp.y);
+            if (DEBUG)
+                System.out.println("redo stack size: " + redo.size());
         }
     }
 }

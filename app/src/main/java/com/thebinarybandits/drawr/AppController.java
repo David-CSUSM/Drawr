@@ -73,7 +73,7 @@ public class AppController {
             // then we would have to initialize the canvas based on the file's canvas size
             canvas.reset();
             canvas.initialize();
-            canvas.setLayersData(layersArrayList);
+            canvas.initLayersData(layersArrayList);
         }
     }
     
@@ -113,5 +113,14 @@ public class AppController {
             fileOut.close();
         }
     }
-    
+
+    @FXML
+    void undo(ActionEvent event) {
+        canvas.undo();
+    }
+
+    @FXML
+    void redo(ActionEvent event) {
+        canvas.redo();
+    }
 }
