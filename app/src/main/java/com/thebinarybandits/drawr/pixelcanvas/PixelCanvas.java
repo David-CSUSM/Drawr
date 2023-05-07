@@ -126,11 +126,18 @@ public class PixelCanvas {
     public void draw(int x, int y) {
         if (tool != null && layers.size() > 0) {
             pushUndo();
+            Color old_color = layers.get(index).getPixelData(x, y);
 
             tool.useTool(layers.get(index), x, y, color, size);
             canvasView.update(getImage());
 
             getLayerView().update(getImage());
+
+            if (old_color.equals(layers.get(index).getPixelData(x, y))) {
+                if (DEBUG)
+                    System.out.println("No changes, dropping undo push");
+                undo.pop();
+            }
         }
     }
 
