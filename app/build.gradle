@@ -23,6 +23,9 @@ dependencies {
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.1-jre'
+
+    // https://mvnrepository.com/artifact/org.javatuples/javatuples
+    implementation 'org.javatuples:javatuples:1.2'
 }
 
 application {
