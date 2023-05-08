@@ -19,6 +19,7 @@
             <Menu mnemonicParsing="false" text="Edit">
                 <MenuItem mnemonicParsing="false" onAction="#undo" text="Undo" />
                 <MenuItem mnemonicParsing="false" onAction="#redo" text="Redo" />
+            <MenuItem mnemonicParsing="false" onAction="#clear" text="Clear" />
             </Menu>
         </MenuBar>
     </top>

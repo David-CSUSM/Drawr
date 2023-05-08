@@ -123,4 +123,9 @@ public class AppController {
     void redo(ActionEvent event) {
         canvas.redo();
     }
+
+    @FXML
+    void clear(ActionEvent event){
+        PixelCanvas.getInstance().clear();
+    }
 }
