@@ -126,6 +126,6 @@ public class AppController {
 
     @FXML
     void clear(ActionEvent event){
-        PixelCanvas.getInstance().clear();
+        canvas.clear();
     }
 }
