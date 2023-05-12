@@ -8,31 +8,27 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 
-<VBox prefHeight="360.0" prefWidth="150.0" style="-fx-background-color: #d2d2d2;" BorderPane.alignment="CENTER"
-      xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.thebinarybandits.drawr.tools.ToolsController">
-    <RadioButton focusTraversable="false" mnemonicParsing="false" onAction="#penSelected" text="Pen">
-        <toggleGroup>
-            <ToggleGroup fx:id="Tools"/>
-        </toggleGroup>
+<VBox prefHeight="360.0" prefWidth="150.0" style="-fx-background-color: #d2d2d2;" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thebinarybandits.drawr.tools.ToolsController">
+    <RadioButton fx:id="penButton" focusTraversable="false" mnemonicParsing="false" onAction="#penSelected" selected="true" text="Pen">
         <tooltip>
-            <Tooltip text="Empty Tooltip"/>
+            <Tooltip text="Empty Tooltip" />
+        </tooltip>
+      <toggleGroup>
+         <ToggleGroup fx:id="toolButtonGroup" />
+      </toggleGroup>
+    </RadioButton>
+    <RadioButton focusTraversable="false" mnemonicParsing="false" onAction="#eraserSelected" text="Eraser" toggleGroup="$toolButtonGroup">
+        <tooltip>
+            <Tooltip text="Empty Tooltip" />
         </tooltip>
     </RadioButton>
-    <RadioButton focusTraversable="false" mnemonicParsing="false" onAction="#eraserSelected" text="Eraser"
-                 toggleGroup="$Tools">
-        <tooltip>
-            <Tooltip text="Empty Tooltip"/>
-        </tooltip>
-    </RadioButton>
-    <RadioButton focusTraversable="false" mnemonicParsing="false" onAction="#paintBucketSelected" text="PaintBucket"
-                 toggleGroup="$Tools"/>
+    <RadioButton focusTraversable="false" mnemonicParsing="false" onAction="#paintBucketSelected" text="PaintBucket" toggleGroup="$toolButtonGroup" />
     <ColorPicker fx:id="colorPicker" focusTraversable="false" onAction="#updateColor">
         <value>
-            <Color/>
+            <Color />
         </value>
         <tooltip>
-            <Tooltip text="Empty Tooltip"/>
+            <Tooltip text="Empty Tooltip" />
         </tooltip>
     </ColorPicker>
 </VBox>

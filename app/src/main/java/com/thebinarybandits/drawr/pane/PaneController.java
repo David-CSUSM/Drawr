@@ -45,19 +45,15 @@ public class PaneController {
         if (inBoundsHorizontal && inBoundsVertical) {
             if (canvas.draw(scaledX, scaledY))
                 mouseDragDraws++;
-            System.out.println("mouseDrag int is: " + mouseDragDraws);
         }
     }
 
     @FXML
     void mouseReleased(MouseEvent event) {
-        System.out.println("I am in mouseReleased!");
         while (mouseDragDraws > 0) {
             canvas.discardUndo();
-            System.out.println("mouseDrag int is: " + mouseDragDraws);
             mouseDragDraws--;
         }
-        System.out.println("mouseDrag int is: " + mouseDragDraws);
     }
 
     @FXML

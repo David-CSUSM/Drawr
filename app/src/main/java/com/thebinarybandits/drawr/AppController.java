@@ -1,11 +1,13 @@
 package com.thebinarybandits.drawr;
 
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
+import com.thebinarybandits.drawr.tools.ToolsController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.Parent;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -13,7 +15,11 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class AppController {
+    @FXML
+    private Parent tools;
     private PixelCanvas canvas;
+    @FXML
+    private ToolsController toolsController;
 
     @FXML
     public void initialize() {
@@ -34,6 +40,7 @@ public class AppController {
             // user clicked OK, reset the PixelCanvas
             canvas.reset();
             canvas.initialize();
+            toolsController.reset();
         }
     }
 
@@ -72,6 +79,7 @@ public class AppController {
             canvas.reset();
             canvas.initialize();
             canvas.initLayersData(layersArrayList);
+            toolsController.reset();
         }
     }
 

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 import com.thebinarybandits.drawr.misc.Pair;
+import com.thebinarybandits.drawr.tools.Pen;
 
 // singleton pattern
 public class PixelCanvas {
@@ -23,14 +24,14 @@ public class PixelCanvas {
     private int index;
     private Stack<Pair<ArrayList<String[][]>,Integer>> undo;
     private Stack<Pair<ArrayList<String[][]>,Integer>> redo;
-    private static boolean DEBUG = true;
+    private static boolean DEBUG = false;
 
     public enum Direction {UP, DOWN}
 
     private PixelCanvas() {
         size = 16;
         viewSize = 640;
-        tool = null;
+        tool = new Pen();
         color = Color.BLACK;
         layers = new ArrayList<>();
         canvasView = new PixelView(viewSize);
@@ -63,7 +64,7 @@ public class PixelCanvas {
     public void reset() {
         size = 16;
         viewSize = 640;
-        tool = null;
+        tool = new Pen();
         color = Color.BLACK;
         layers.clear();
         canvasView.clear();
