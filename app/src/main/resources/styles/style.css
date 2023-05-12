@@ -46,3 +46,7 @@ ToolBar{
     -fx-background-color: #f4f4f4;
 }
 
+Label{
+    -fx-font-family: "Comic Sans MS";
+}
+

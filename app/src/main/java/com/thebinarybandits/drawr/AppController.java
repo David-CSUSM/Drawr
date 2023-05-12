@@ -1,5 +1,6 @@
 package com.thebinarybandits.drawr;
 
+import com.thebinarybandits.drawr.encoder.GifManager;
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 import com.thebinarybandits.drawr.tools.ToolsController;
 import javafx.event.ActionEvent;
@@ -84,13 +85,57 @@ public class AppController {
     }
 
     @FXML
-    void saveAsGIF(ActionEvent event) {
+    void saveAsGIF(ActionEvent event) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        JFileChooser fileChooser = new JFileChooser();
 
+        // Set file extension filter to only show '.gif' files
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("GIF Files (*.gif)", "gif");
+        fileChooser.setFileFilter(filter);
+
+        // Show the dialog and wait for user response
+        int result = fileChooser.showSaveDialog(null);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+
+            // Add '.gif' extension if not already present
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.endsWith(".gif")) {
+                selectedFile = new File(filePath + ".gif");
+            }
+
+            GifManager gifmanager = new GifManager(canvas.getLayers());
+            gifmanager.start(selectedFile.toString());
+
+
+        }
     }
 
     @FXML
-    void saveAsPNG(ActionEvent event) {
+    void saveAsPNG(ActionEvent event) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        JFileChooser fileChooser = new JFileChooser();
 
+        // Set file extension filter to only show '.png' files
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG Files (*.png)", "png");
+        fileChooser.setFileFilter(filter);
+
+        // Show the dialog and wait for user response
+        int result = fileChooser.showSaveDialog(null);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+
+            // Add '.png' extension if not already present
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.endsWith(".png")) {
+                selectedFile = new File(filePath + ".png");
+            }
+
+
+
+        }
     }
 
     @FXML
