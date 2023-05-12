@@ -13,6 +13,7 @@ public class PaneController {
     @FXML
     private Pane pane;
     private PixelCanvas canvas;
+    private int mouseDragDraws = 0;
 
     @FXML
     public void initialize() {
@@ -42,8 +43,21 @@ public class PaneController {
         boolean inBoundsVertical = scaledY >= 0 && scaledY < canvas.getSize();
 
         if (inBoundsHorizontal && inBoundsVertical) {
-            canvas.draw(scaledX, scaledY);
+            if (canvas.draw(scaledX, scaledY))
+                mouseDragDraws++;
+            System.out.println("mouseDrag int is: " + mouseDragDraws);
         }
+    }
+
+    @FXML
+    void mouseReleased(MouseEvent event) {
+        System.out.println("I am in mouseReleased!");
+        while (mouseDragDraws > 0) {
+            canvas.discardUndo();
+            System.out.println("mouseDrag int is: " + mouseDragDraws);
+            mouseDragDraws--;
+        }
+        System.out.println("mouseDrag int is: " + mouseDragDraws);
     }
 
     @FXML

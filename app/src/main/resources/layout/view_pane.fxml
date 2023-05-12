@@ -4,11 +4,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<HBox alignment="CENTER" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.thebinarybandits.drawr.pane.PaneController">
+<HBox alignment="CENTER" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thebinarybandits.drawr.pane.PaneController">
     <padding>
-        <Insets bottom="33.0" left="33.0" right="33.0" top="33.0"/>
+        <Insets bottom="33.0" left="33.0" right="33.0" top="33.0" />
     </padding>
-    <Pane fx:id="pane" onKeyPressed="#keyPressed" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed"
-          prefHeight="640.0" prefWidth="640.0"/>
+    <Pane fx:id="pane" onKeyPressed="#keyPressed" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed" onMouseReleased="#mouseReleased" prefHeight="640.0" prefWidth="640.0" />
 </HBox>

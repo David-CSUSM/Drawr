@@ -123,7 +123,7 @@ public class PixelCanvas {
         return layerViews;
     }
 
-    public void draw(int x, int y) {
+    public boolean draw(int x, int y) {
         if (tool != null && layers.size() > 0) {
             pushUndo();
             Color old_color = layers.get(index).getPixelData(x, y);
@@ -137,11 +137,17 @@ public class PixelCanvas {
                 if (DEBUG)
                     System.out.println("No changes, dropping undo push");
                 undo.pop();
+                return false;
             }
+
+            return true;
         }
+
+        return false;
     }
 
     public void clear() {
+        pushUndo();
         layers.get(index).clear();
         canvasView.clear();
         layerViews.get(index).clear();
@@ -269,6 +275,11 @@ public class PixelCanvas {
         redo.clear();
         if (DEBUG)
             System.out.println("redo stack size: " + redo.size());
+    }
+
+    // function for pane image to work around mouseDrag
+    public void discardUndo() {
+        undo.pop();
     }
 
     public void undo() {
