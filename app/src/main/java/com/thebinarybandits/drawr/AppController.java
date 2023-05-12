@@ -3,15 +3,22 @@ package com.thebinarybandits.drawr;
 import com.thebinarybandits.drawr.encoder.GifManager;
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 import com.thebinarybandits.drawr.tools.ToolsController;
+import com.thebinarybandits.drawr.pixelcanvas.PixelImage;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.Parent;
+import javafx.scene.image.WritableImage;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -107,8 +114,6 @@ public class AppController {
 
             GifManager gifmanager = new GifManager(canvas.getLayers());
             gifmanager.start(selectedFile.toString());
-
-
         }
     }
 
@@ -133,14 +138,59 @@ public class AppController {
                 selectedFile = new File(filePath + ".png");
             }
 
+            Canvas flattenImage = new Canvas(canvas.getSize(), canvas.getSize());
+            GraphicsContext imageGraphics = flattenImage.getGraphicsContext2D();
+            ArrayList<PixelImage> images = canvas.getLayers();
 
+            for (PixelImage image : images) {
+                imageGraphics.drawImage(image, 0, 0);
+            }
 
+            WritableImage png = flattenImage.snapshot(null, null);
+
+            BufferedImage test = SwingFXUtils.fromFXImage(png, null);
+            ImageIO.write(test, "png", selectedFile);
         }
     }
 
     @FXML
-    void saveAsSpritesheet(ActionEvent event) {
+    void saveAsSpritesheet(ActionEvent event) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        JFileChooser fileChooser = new JFileChooser();
 
+        // Set file extension filter to only show '.png' files
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG Files (*.png)", "png");
+        fileChooser.setFileFilter(filter);
+
+        // Show the dialog and wait for user response
+        int result = fileChooser.showSaveDialog(null);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+
+            // Add '.png' extension if not already present
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.endsWith(".png")) {
+                selectedFile = new File(filePath + ".png");
+            }
+
+            int length = canvas.getSize() * canvas.getLayers().size();
+            int height = canvas.getSize();
+            Canvas combineImage = new Canvas(length, height);
+            GraphicsContext imageGraphics = combineImage.getGraphicsContext2D();
+            ArrayList<PixelImage> images = canvas.getLayers();
+
+            int counter = 0;
+            for (PixelImage image : images) {
+                imageGraphics.drawImage(image, counter * canvas.getSize(), 0);
+                ++counter;
+            }
+
+            WritableImage spritesheet = combineImage.snapshot(null, null);
+
+            BufferedImage test = SwingFXUtils.fromFXImage(spritesheet, null);
+            ImageIO.write(test, "png", selectedFile);
+        }
     }
 
     @FXML
