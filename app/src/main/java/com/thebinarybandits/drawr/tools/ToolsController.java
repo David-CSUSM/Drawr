@@ -12,29 +12,33 @@ public class ToolsController {
     private ColorPicker colorPicker;
     @FXML
     private RadioButton penButton;
-    private final ToolFactory factory = new ToolFactory();
     private final PixelCanvas canvas = PixelCanvas.getInstance();
 
     public void reset(){
         penButton.setSelected(true);
-        canvas.setTool(factory.getTool("Pen"));
+        canvas.setTool(new Pen());
         colorPicker.setValue(Color.BLACK);
         canvas.setColor(colorPicker.getValue());
     }
 
     @FXML
     void eraserSelected(ActionEvent event) {
-        canvas.setTool(factory.getTool("Eraser"));
+        canvas.setTool(new Eraser());
     }
 
     @FXML
     void paintBucketSelected(ActionEvent event) {
-        canvas.setTool(factory.getTool("PaintBucket"));
+        canvas.setTool(new PaintBucket());
     }
 
     @FXML
     void penSelected(ActionEvent event) {
-        canvas.setTool(factory.getTool("Pen"));
+        canvas.setTool(new Pen());
+    }
+
+    @FXML
+    void eyeDropperSelected(ActionEvent event) {
+        canvas.setTool(new EyeDropper(colorPicker, canvas));
     }
 
     @FXML

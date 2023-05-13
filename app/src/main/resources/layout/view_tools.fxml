@@ -23,6 +23,7 @@
         </tooltip>
     </RadioButton>
     <RadioButton focusTraversable="false" mnemonicParsing="false" onAction="#paintBucketSelected" text="PaintBucket" toggleGroup="$toolButtonGroup" />
+   <RadioButton focusTraversable="false" mnemonicParsing="false" onAction="#eyeDropperSelected" text="EyeDropper" toggleGroup="$toolButtonGroup" />
     <ColorPicker fx:id="colorPicker" focusTraversable="false" onAction="#updateColor">
         <value>
             <Color />
