@@ -171,7 +171,10 @@ public class PixelCanvas {
         canvasView.update(getImage());
     }
 
-    // creates a layer and avoids pushing it onto the undo stack
+    /**
+     * Creates a layer.
+     * Does not push it onto the undo stack.
+     */
     private void createLayerInternal() {
         if (index == layers.size() - 1) {
             ++index;
@@ -228,6 +231,11 @@ public class PixelCanvas {
         }
     }
 
+    /**
+     * Gets the data of all images and squares in thie project
+     * 
+     * @return  a mapped array, each arraylist element represents a image, each 2d array of strings represents the color of all squares
+     */
     public ArrayList<String[][]> getLayersData() {
         ArrayList<String[][]> layersArrayList = new ArrayList<>();
 
@@ -238,6 +246,11 @@ public class PixelCanvas {
         return layersArrayList;
     }
 
+    /**
+     * Initalizes the layers on the project from a mapped ArrayList of Strings.
+     * 
+     * @param layersArrayList  a mapped array, each arraylist element represents a image, each 2d array of strings represents the color of all squares
+     */
     public void initLayersData(ArrayList<String[][]> layersArrayList) {
         getImage().setImageData(layersArrayList.get(0));
         getCanvasView().update(getImage());
@@ -251,22 +264,30 @@ public class PixelCanvas {
         }
     }
 
-    // helper function for undo
-    // should probably change the name
-    private void setLayersData(ArrayList<String[][]> layersArraylist, int index) {
+    /**
+     * Used only with Undo().
+     * Sets the project to project in layersArraylist
+     * 
+     * @param layersArrayList  a mapped array, each arraylist element represents a image, each 2d array of strings represents the color of all squares
+     * @param index  index of the active image
+     */
+    private void setLayersData(ArrayList<String[][]> layersArrayList, int index) {
         layers.clear();
         layerViews.clear();
 
-        for (int i = 0; i < layersArraylist.size(); i++) {
+        for (int i = 0; i < layersArrayList.size(); i++) {
             createLayerInternal();
-            layers.get(i).setImageData(layersArraylist.get(i));
+            layers.get(i).setImageData(layersArrayList.get(i));
             layerViews.get(i).update(layers.get(i));
         }
 
         changeLayer(index);
     }
 
-    // pushes layersData onto the undo stack and clears redo stack
+    /**
+     * Pushes layersData onto the undo stack.
+     * Clears the redo stack.
+     */
     private void pushUndo() {
         if (DEBUG)
             System.out.println("***Function: pushUndo***");
@@ -278,11 +299,19 @@ public class PixelCanvas {
             System.out.println("redo stack size: " + redo.size());
     }
 
-    // function for pane image to work around mouseDrag
+
+    /**
+     * Discards the top of the undo stack.
+     * Used for PaneController to work with mouseDrag
+     */
     public void discardUndo() {
         undo.pop();
     }
 
+    /**
+     * Pop the undo stack and make that the active project.
+     * Also pushes the current project on the redo stack.
+     */
     public void undo() {
         if (!undo.empty()) {
             if (DEBUG)
@@ -297,6 +326,9 @@ public class PixelCanvas {
         }
     }
 
+    /**
+     * Pop the redo stack and make that the active project.
+     */
     public void redo() {
         if (!redo.empty()) {
             if (DEBUG)
