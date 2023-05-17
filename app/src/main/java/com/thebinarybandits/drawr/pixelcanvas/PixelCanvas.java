@@ -16,8 +16,8 @@ public class PixelCanvas {
     private static volatile PixelCanvas instance;
     private int size;
     private int viewSize;
-    private Tool tool;
-    private Color color;
+    private Tool activeTool;
+    private Color activeColor;
     private final ArrayList<PixelImage> layers;
     private final PixelView canvasView;
     private final ObservableList<PixelView> layerViews;
@@ -31,8 +31,8 @@ public class PixelCanvas {
     private PixelCanvas() {
         size = 16;
         viewSize = 640;
-        tool = new Pen();
-        color = Color.BLACK;
+        activeTool = new Pen();
+        activeColor = Color.BLACK;
         layers = new ArrayList<>();
         canvasView = new PixelView(viewSize);
         layerViews = FXCollections.observableArrayList();
@@ -64,8 +64,8 @@ public class PixelCanvas {
     public void reset() {
         size = 16;
         viewSize = 640;
-        tool = new Pen();
-        color = Color.BLACK;
+        activeTool = new Pen();
+        activeColor = Color.BLACK;
         layers.clear();
         canvasView.clear();
         layerViews.clear();
@@ -83,11 +83,11 @@ public class PixelCanvas {
     }
 
     public void setTool(Tool tool) {
-        this.tool = tool;
+        activeTool = tool;
     }
 
     public void setColor(Color color) {
-        this.color = color;
+        activeColor = color;
     }
 
     public int getSize() {
@@ -125,11 +125,11 @@ public class PixelCanvas {
     }
 
     public boolean draw(int x, int y) {
-        if (tool != null && layers.size() > 0) {
+        if (activeTool != null && layers.size() > 0) {
             pushUndo();
             Color old_color = layers.get(index).getPixelData(x, y);
 
-            tool.useTool(layers.get(index), x, y, color, size);
+            activeTool.useTool(layers.get(index), x, y, activeColor, size);
             canvasView.update(getImage());
 
             getLayerView().update(getImage());
