@@ -35,8 +35,12 @@ public class AppController {
         canvas.initialize();
     }
 
+    /**
+     * Runs when the user clicks the 'new' menu button.
+     * Creates a new project.
+     */
     @FXML
-    void newProject(ActionEvent event) {
+    void newProject() {
         // popup window to alert user that creating a new project will cause unsaved changes to be lost
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle("New Project");
@@ -53,8 +57,12 @@ public class AppController {
     }
 
 
+    /**
+     * Runs when the user clicks the 'open' menu button.
+     * Opens a project from a .drawr file.
+     */
     @FXML
-    void openProject(ActionEvent event) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    void openProject() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Choose a File");
@@ -92,7 +100,7 @@ public class AppController {
     }
 
     @FXML
-    void saveAsGIF(ActionEvent event) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    void saveAsGIF() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFileChooser fileChooser = new JFileChooser();
 
@@ -118,7 +126,7 @@ public class AppController {
     }
 
     @FXML
-    void saveAsPNG(ActionEvent event) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+    void saveAsPNG() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFileChooser fileChooser = new JFileChooser();
 
@@ -154,7 +162,7 @@ public class AppController {
     }
 
     @FXML
-    void saveAsSpritesheet(ActionEvent event) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+    void saveAsSpritesheet() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFileChooser fileChooser = new JFileChooser();
 
@@ -193,8 +201,12 @@ public class AppController {
         }
     }
 
+    /**
+     * Runs when the user clicks the 'save' menu button.
+     * Saves the project as a .drawr file.
+     */
     @FXML
-    void saveProject(ActionEvent event) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    void saveProject() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFileChooser fileChooser = new JFileChooser();
 
@@ -224,18 +236,30 @@ public class AppController {
         }
     }
 
+    /**
+     * Runs when the user clicks the 'undo' menu button.
+     * Undo the project.
+     */
     @FXML
-    void undo(ActionEvent event) {
+    void undo() {
         canvas.undo();
     }
 
+    /**
+     * Runs when the user clicks the 'redo' menu button.
+     * Redo the project.
+     */
     @FXML
-    void redo(ActionEvent event) {
+    void redo() {
         canvas.redo();
     }
 
+    /**
+     * Runs when the user clicks the 'clear' menu button.
+     * Erases the entire active image
+     */
     @FXML
-    void clear(ActionEvent event) {
+    void clear() {
         canvas.clear();
     }
 }
