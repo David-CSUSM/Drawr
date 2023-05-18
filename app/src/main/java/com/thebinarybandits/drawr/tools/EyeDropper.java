@@ -8,15 +8,16 @@ import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 /**
  * EyeDropper tool. Implements the useTool method.
  */
-public class EyeDropper implements Tool{
-    private ColorPicker colorPicker;
-    private PixelCanvas canvas;
+public class EyeDropper implements Tool {
+
+    private final ColorPicker colorPicker;
+    private final PixelCanvas canvas;
 
     /**
      * EyeDropper Constructor.
      * 
      * @param colorPicker  the color picker from ToolsController
-     * @param canvas  the cavnas from ToolsController
+     * @param canvas  the canvas from ToolsController
      */
     public EyeDropper(ColorPicker colorPicker, PixelCanvas canvas) {
         this.colorPicker = colorPicker;
@@ -24,11 +25,11 @@ public class EyeDropper implements Tool{
     }
 
     /**
-     * Inherited from Tool. Sets the colorpicker and canvas activeColor to the color of a square.
+     * Inherited from Tool. Sets the colorPicker and canvas activeColor to the color of a square.
      * 
      * @param panel  the panel that the color will be grabbed from
-     * @param x  the x coordinate of the sqaure that's color will be grabbed
-     * @param y  the y coordinate of the sqaure that's color will be grabbed
+     * @param x  the x coordinate of the square that's color will be grabbed
+     * @param y  the y coordinate of the square that's color will be grabbed
      * @param color  not needed. Inherited from tool
      * @param CANVAS_SIZE  size of the grid on the panel. Default is 16x16
      */
@@ -36,4 +37,5 @@ public class EyeDropper implements Tool{
         colorPicker.setValue(panel.getPixelData(x, y));
         canvas.setColor(colorPicker.getValue());
     }
+
 }

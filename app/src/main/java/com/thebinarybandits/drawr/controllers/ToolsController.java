@@ -1,6 +1,10 @@
-package com.thebinarybandits.drawr.tools;
+package com.thebinarybandits.drawr.controllers;
 
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
+import com.thebinarybandits.drawr.tools.Eraser;
+import com.thebinarybandits.drawr.tools.EyeDropper;
+import com.thebinarybandits.drawr.tools.PaintBucket;
+import com.thebinarybandits.drawr.tools.Pen;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.RadioButton;
@@ -10,11 +14,11 @@ import javafx.scene.paint.Color;
  * Interacts with the view_tools xml file.
  */
 public class ToolsController {
-    @FXML
-    private ColorPicker colorPicker;
-    @FXML
-    private RadioButton penButton;
+
     private final PixelCanvas canvas = PixelCanvas.getInstance(); // the active canvas
+
+    @FXML private ColorPicker colorPicker;
+    @FXML private RadioButton penButton;
 
     /**
      * Resets the Tools panel to default values.
@@ -63,12 +67,12 @@ public class ToolsController {
     }
 
     /**
-     * Runs when the user selects a color from the colorp picker.
+     * Runs when the user selects a color from the color picker.
      * Sets the color chosen as the active color.
      */
     @FXML
     void updateColor() {
         canvas.setColor(colorPicker.getValue());
     }
-}
 
+}

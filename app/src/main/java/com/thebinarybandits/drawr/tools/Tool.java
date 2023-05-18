@@ -8,5 +8,5 @@ import javafx.scene.paint.Color;
  * Allows the activeTool data member in PixelCanvas to benefit from polymorphism.
  */
 public interface Tool {
-    public void useTool(PixelImage panel, int x, int y, Color color, int CANVAS_SIZE);
+    void useTool(PixelImage panel, int x, int y, Color color, int CANVAS_SIZE);
 }

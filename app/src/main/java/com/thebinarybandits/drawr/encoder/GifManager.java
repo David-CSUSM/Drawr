@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class GifManager {
+
     private final ArrayList<PixelImage> images;
     private final ArrayList<BufferedImage> bufferedImages;
     private int repeat;
@@ -86,4 +87,5 @@ public class GifManager {
 
         return imageView.snapshot(null, null);
     }
+
 }

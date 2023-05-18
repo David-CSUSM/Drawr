@@ -1,33 +1,38 @@
-package com.thebinarybandits.drawr;
+package com.thebinarybandits.drawr.controllers;
 
 import com.thebinarybandits.drawr.encoder.GifManager;
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
-import com.thebinarybandits.drawr.tools.ToolsController;
 import com.thebinarybandits.drawr.pixelcanvas.PixelImage;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
-import javafx.scene.Parent;
 import javafx.scene.image.WritableImage;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class AppController {
-    @FXML
-    private Parent tools;
+
     private PixelCanvas canvas;
-    @FXML
-    private ToolsController toolsController;
+
+    @FXML private Parent tools;
+    @FXML private ToolsController toolsController;
 
     @FXML
     public void initialize() {
@@ -55,7 +60,6 @@ public class AppController {
             toolsController.reset();
         }
     }
-
 
     /**
      * Runs when the user clicks the 'open' menu button.
@@ -162,7 +166,7 @@ public class AppController {
     }
 
     @FXML
-    void saveAsSpritesheet() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+    void saveAsSpriteSheet() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFileChooser fileChooser = new JFileChooser();
 
@@ -194,9 +198,9 @@ public class AppController {
                 ++counter;
             }
 
-            WritableImage spritesheet = combineImage.snapshot(null, null);
+            WritableImage spriteSheet = combineImage.snapshot(null, null);
 
-            BufferedImage test = SwingFXUtils.fromFXImage(spritesheet, null);
+            BufferedImage test = SwingFXUtils.fromFXImage(spriteSheet, null);
             ImageIO.write(test, "png", selectedFile);
         }
     }
@@ -262,4 +266,5 @@ public class AppController {
     void clear() {
         canvas.clear();
     }
+
 }

@@ -1,7 +1,8 @@
-package com.thebinarybandits.drawr.pane;
+package com.thebinarybandits.drawr.controllers;
 
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 import com.thebinarybandits.drawr.pixelcanvas.PixelView;
+import com.thebinarybandits.drawr.utils.Grid;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -9,11 +10,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
-public class PaneController {
-    @FXML
-    private Pane pane;
+public class CanvasController {
+
     private PixelCanvas canvas;
     private int mouseDragDraws = 0;
+
+    @FXML private Pane pane;
 
     @FXML
     public void initialize() {
@@ -49,7 +51,7 @@ public class PaneController {
     }
 
     @FXML
-    void mouseReleased(MouseEvent event) {
+    void mouseReleased() {
         while (mouseDragDraws > 0) {
             canvas.discardUndo();
             mouseDragDraws--;
@@ -65,4 +67,5 @@ public class PaneController {
 
         canvas.draw(scaledX, scaledY);
     }
+
 }

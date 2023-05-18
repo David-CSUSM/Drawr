@@ -1,6 +1,7 @@
-package com.thebinarybandits.drawr.layers;
+package com.thebinarybandits.drawr.controllers;
 
 import com.thebinarybandits.drawr.encoder.GifManager;
+import com.thebinarybandits.drawr.layers.LayerCell;
 import com.thebinarybandits.drawr.pixelcanvas.PixelCanvas;
 import com.thebinarybandits.drawr.pixelcanvas.PixelView;
 import javafx.beans.binding.Binding;
@@ -8,7 +9,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
@@ -23,14 +23,13 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class LayersController {
-    @FXML
-    private ImageView animationView;
-    @FXML
-    private TextField delayField;
-    @FXML
-    private VBox layersContainer;
+
     private PixelCanvas canvas;
     private SimpleIntegerProperty index;
+
+    @FXML private ImageView animationView;
+    @FXML private TextField delayField;
+    @FXML private VBox layersContainer;
 
     @FXML
     public void initialize() {
@@ -121,17 +120,17 @@ public class LayersController {
     }
 
     @FXML
-    void createLayer(ActionEvent event) {
+    void createLayer() {
         canvas.createLayer();
     }
 
     @FXML
-    void deleteLayer(ActionEvent event) {
+    void deleteLayer() {
         canvas.deleteLayer();
     }
 
     @FXML
-    void moveUp(ActionEvent event) {
+    void moveUp() {
         canvas.swapLayer(PixelCanvas.Direction.UP);
 
         if (index.intValue() - 1 >= 0) {
@@ -144,7 +143,7 @@ public class LayersController {
     }
 
     @FXML
-    void moveDown(ActionEvent event) {
+    void moveDown() {
         canvas.swapLayer(PixelCanvas.Direction.DOWN);
 
         if (index.intValue() + 1 <= layersContainer.getChildren().size() - 1) {
@@ -157,7 +156,7 @@ public class LayersController {
     }
 
     @FXML
-    void previewAnimation(ActionEvent event) throws IOException {
+    void previewAnimation() throws IOException {
         if ((delayField.getText().equals(""))) {
             return;
         }
@@ -174,4 +173,5 @@ public class LayersController {
 
         animationView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/drawable/preview.gif"))));
     }
+
 }

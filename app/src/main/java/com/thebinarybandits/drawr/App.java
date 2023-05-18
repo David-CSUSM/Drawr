@@ -7,21 +7,26 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class App extends Application {
+
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/layout/view_app.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layout/view_app.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Drawr");
-        stage.getIcons().add(new Image("/drawable/ic_logo.png"));
-        stage.setScene(scene);
-        String css = this.getClass().getResource("/styles/style.css").toExternalForm(); 
+
+        String css = Objects.requireNonNull(getClass().getResource("/styles/style.css")).toExternalForm();
         scene.getStylesheets().add(css);
+
+        stage.setTitle("Drawr");
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/drawable/ic_logo.png")).openStream()));
+        stage.setScene(scene);
         stage.show();
     }
 
     public static void main(String[] args) {
         launch();
     }
+
 }

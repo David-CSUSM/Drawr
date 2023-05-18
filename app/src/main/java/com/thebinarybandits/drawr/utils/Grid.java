@@ -1,12 +1,14 @@
-package com.thebinarybandits.drawr.pane;
+package com.thebinarybandits.drawr.utils;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Grid extends Canvas {
+
     private int size;
     private int scale;
     private final GraphicsContext graphics;
+
     public Grid(int size, int scale) {
         super(size, size);
         this.size = size;
@@ -32,4 +34,5 @@ public class Grid extends Canvas {
             graphics.strokeLine(column, 0, column, size);
         }
     }
+
 }

@@ -5,6 +5,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 public class PixelImage extends WritableImage {
+
     private final PixelWriter imageWriter;
 
     public PixelImage(int size) {
@@ -28,10 +29,9 @@ public class PixelImage extends WritableImage {
         }
     }
 
-
     /**
      * Gets the color of all squares.
-     * 
+     *
      * @return mapped array of strings, each string represents the color of that square
      */
     public String[][] getImageData() {
@@ -48,8 +48,8 @@ public class PixelImage extends WritableImage {
 
     /**
      * Sets the color of all squares from a 2d array of strings.
-     * 
-     * @param colorStrings  mapped array of strings, each string represents the color of that square
+     *
+     * @param colorStrings mapped array of strings, each string represents the color of that square
      */
     public void setImageData(String[][] colorStrings) {
         for (int x = 0; x < 16; x++) {
@@ -61,12 +61,13 @@ public class PixelImage extends WritableImage {
 
     /**
      * Gets the color of a square.
-     * 
-     * @param x  the x coordinate of the square
-     * @param y  the y coordinate of the square
-     * @return  the color of the square at (x,y)
+     *
+     * @param x the x coordinate of the square
+     * @param y the y coordinate of the square
+     * @return the color of the square at (x,y)
      */
     public Color getPixelData(int x, int y) {
         return this.getPixelReader().getColor(x, y);
     }
+
 }

@@ -1,6 +1,8 @@
 package com.thebinarybandits.drawr.pixelcanvas;
 
+import com.thebinarybandits.drawr.tools.Pen;
 import com.thebinarybandits.drawr.tools.Tool;
+import com.thebinarybandits.drawr.utils.Pair;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
@@ -8,12 +10,12 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
-import com.thebinarybandits.drawr.misc.Pair;
-import com.thebinarybandits.drawr.tools.Pen;
 
 // singleton pattern
 public class PixelCanvas {
+
     private static volatile PixelCanvas instance;
+
     private int size;
     private int viewSize;
     private Tool activeTool;
@@ -22,9 +24,9 @@ public class PixelCanvas {
     private final PixelView canvasView;
     private final ObservableList<PixelView> layerViews;
     private int index;
-    private Stack<Pair<ArrayList<String[][]>,Integer>> undo;
-    private Stack<Pair<ArrayList<String[][]>,Integer>> redo;
-    private static boolean DEBUG = false;
+    private Stack<Pair<ArrayList<String[][]>, Integer>> undo;
+    private Stack<Pair<ArrayList<String[][]>, Integer>> redo;
+    private static final boolean DEBUG = false;
 
     public enum Direction {UP, DOWN}
 
@@ -37,8 +39,8 @@ public class PixelCanvas {
         canvasView = new PixelView(viewSize);
         layerViews = FXCollections.observableArrayList();
         index = -1;
-        undo = new Stack<Pair<ArrayList<String[][]>,Integer>>();
-        redo = new Stack<Pair<ArrayList<String[][]>,Integer>>();
+        undo = new Stack<>();
+        redo = new Stack<>();
     }
 
     public static PixelCanvas getInstance() {
@@ -70,8 +72,8 @@ public class PixelCanvas {
         canvasView.clear();
         layerViews.clear();
         index = -1;
-        undo = new Stack<Pair<ArrayList<String[][]>,Integer>>();
-        redo = new Stack<Pair<ArrayList<String[][]>,Integer>>();
+        undo = new Stack<>();
+        redo = new Stack<>();
     }
 
     public void setSize(int size) {
@@ -222,7 +224,7 @@ public class PixelCanvas {
 
         } else if (location == Direction.DOWN && index + 1 <= layerViews.size() - 1) {
             pushUndo();
-            
+
             PixelImage nextImage = layers.get(index + 1);
             layers.remove(nextImage);
             layers.add(index, nextImage);
@@ -232,9 +234,9 @@ public class PixelCanvas {
     }
 
     /**
-     * Gets the data of all images and squares in thie project
-     * 
-     * @return  a mapped array, each arraylist element represents a image, each 2d array of strings represents the color of all squares
+     * Gets the data of all images and squares in the project
+     *
+     * @return a mapped array, each arraylist element represents an image, each 2d array of strings represents the color of all squares
      */
     public ArrayList<String[][]> getLayersData() {
         ArrayList<String[][]> layersArrayList = new ArrayList<>();
@@ -247,9 +249,9 @@ public class PixelCanvas {
     }
 
     /**
-     * Initalizes the layers on the project from a mapped ArrayList of Strings.
-     * 
-     * @param layersArrayList  a mapped array, each arraylist element represents a image, each 2d array of strings represents the color of all squares
+     * Initializes the layers on the project from a mapped ArrayList of Strings.
+     *
+     * @param layersArrayList a mapped array, each arraylist element represents an image, each 2d array of strings represents the color of all squares
      */
     public void initLayersData(ArrayList<String[][]> layersArrayList) {
         getImage().setImageData(layersArrayList.get(0));
@@ -267,9 +269,9 @@ public class PixelCanvas {
     /**
      * Used only with Undo().
      * Sets the project to project in layersArraylist
-     * 
-     * @param layersArrayList  a mapped array, each arraylist element represents a image, each 2d array of strings represents the color of all squares
-     * @param index  index of the active image
+     *
+     * @param layersArrayList a mapped array, each arraylist element represents an image, each 2d array of strings represents the color of all squares
+     * @param index           index of the active image
      */
     private void setLayersData(ArrayList<String[][]> layersArrayList, int index) {
         layers.clear();
@@ -291,14 +293,13 @@ public class PixelCanvas {
     private void pushUndo() {
         if (DEBUG)
             System.out.println("***Function: pushUndo***");
-        undo.push(new Pair<ArrayList<String[][]>,Integer>(getLayersData(), index));
+        undo.push(new Pair<>(getLayersData(), index));
         if (DEBUG)
             System.out.println("undo stack size: " + undo.size());
         redo.clear();
         if (DEBUG)
             System.out.println("redo stack size: " + redo.size());
     }
-
 
     /**
      * Discards the top of the undo stack.
@@ -316,10 +317,10 @@ public class PixelCanvas {
         if (!undo.empty()) {
             if (DEBUG)
                 System.out.println("***Function: undo***");
-            redo.push(new Pair<ArrayList<String[][]>,Integer>(getLayersData(), index));
+            redo.push(new Pair<>(getLayersData(), index));
             if (DEBUG)
                 System.out.println("redo stack size: " + redo.size());
-            Pair<ArrayList<String[][]>,Integer> temp = undo.pop();
+            Pair<ArrayList<String[][]>, Integer> temp = undo.pop();
             setLayersData(temp.x, temp.y);
             if (DEBUG)
                 System.out.println("undo stack size: " + undo.size());
@@ -333,13 +334,14 @@ public class PixelCanvas {
         if (!redo.empty()) {
             if (DEBUG)
                 System.out.println("***Function: redo***");
-            undo.push(new Pair<ArrayList<String[][]>,Integer>(getLayersData(), index));
+            undo.push(new Pair<>(getLayersData(), index));
             if (DEBUG)
                 System.out.println("undo stack size: " + undo.size());
-            Pair<ArrayList<String[][]>,Integer> temp = redo.pop();
+            Pair<ArrayList<String[][]>, Integer> temp = redo.pop();
             setLayersData(temp.x, temp.y);
             if (DEBUG)
                 System.out.println("redo stack size: " + redo.size());
         }
     }
+
 }

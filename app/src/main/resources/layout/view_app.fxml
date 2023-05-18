@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.thebinarybandits.drawr.AppController">
+            fx:controller="com.thebinarybandits.drawr.controllers.AppController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
@@ -14,7 +14,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#saveProject" text="Save"/>
                 <Menu mnemonicParsing="false" text="Save As...">
                     <MenuItem mnemonicParsing="false" onAction="#saveAsPNG" text="PNG"/>
-                    <MenuItem mnemonicParsing="false" onAction="#saveAsSpritesheet" text="Spritesheet"/>
+                    <MenuItem mnemonicParsing="false" onAction="#saveAsSpriteSheet" text="Spritesheet"/>
                     <MenuItem mnemonicParsing="false" onAction="#saveAsGIF" text="GIF"/>
                 </Menu>
             </Menu>
@@ -32,6 +32,6 @@
         <fx:include source="view_layers.fxml"/>
     </right>
     <center>
-        <fx:include source="view_pane.fxml"/>
+        <fx:include source="view_canvas.fxml"/>
     </center>
 </BorderPane>

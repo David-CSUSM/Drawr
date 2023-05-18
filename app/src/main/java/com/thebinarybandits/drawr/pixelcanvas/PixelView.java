@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
 
 public class PixelView extends Canvas {
+
     private final GraphicsContext viewGraphics;
 
     public PixelView(int size) {
@@ -25,4 +26,5 @@ public class PixelView extends Canvas {
     public GraphicsContext getGraphics() {
         return viewGraphics;
     }
+
 }
