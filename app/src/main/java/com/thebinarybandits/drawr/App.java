@@ -1,5 +1,6 @@
 package com.thebinarybandits.drawr;
 
+import com.thebinarybandits.drawr.controllers.AppController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,6 +19,9 @@ public class App extends Application {
 
         String css = Objects.requireNonNull(getClass().getResource("/styles/style.css")).toExternalForm();
         scene.getStylesheets().add(css);
+
+        AppController appController = fxmlLoader.getController();
+        appController.setStage(stage);
 
         stage.setTitle("Drawr");
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/drawable/ic_logo.png")).openStream()));
