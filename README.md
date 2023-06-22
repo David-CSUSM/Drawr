@@ -19,8 +19,9 @@ Now that Drawr and all its contents are extracted, open a terminal window and na
 If you are using a Windows computer, you may use the file explorer to navigate to the folder Drawr is in, click the address bar and replace it with ‘cmd’. 
 
 ![image](https://github.com/David-CSUSM/Drawr/assets/113550578/599a3cfd-9f9d-4907-b271-96f2427aa30d)
-![image](https://github.com/David-CSUSM/Drawr/assets/113550578/e1cbdbd9-4fc8-4bec-b77c-0b139f082131)
 
 This will open a terminal window already navigated to the Drawr folder. 
 
 Next, type ‘.\gradlew run’ into the console. Drawr will now be running!
+
+![image](https://github.com/David-CSUSM/Drawr/assets/113550578/e1cbdbd9-4fc8-4bec-b77c-0b139f082131)
