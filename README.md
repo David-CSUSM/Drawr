@@ -7,3 +7,16 @@ Simon Hausmaninger, Adam Beck, David Hernandez
 <br/>
 
 <a target="_blank" href="https://icons8.com/icon/xQGijSShcwbt/pixels">Pixels</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+
+# Installation Guide
+Click the green button named “Code”. This will display a list of options, however, we are only interested in the ZIP file option. Click “Download ZIP” and save this file where it is easily accessible, like the Desktop of your computer. When the ZIP file has been downloaded, you will unzip this file by using the file extractor provided by your computer. For example, on Windows you may right click on the ZIP file and select “Extract All”. There also exist third-party file archivers like 7-Zip and WinRAR.
+
+Now that Drawr and all its contents are extracted, open a terminal window and navigate to the folder that contains Drawr. 
+If you are using a Windows computer, you may use the file explorer to navigate to the folder Drawr is in, click the address bar and replace it with ‘cmd’. 
+
+![image](https://github.com/David-CSUSM/Drawr/assets/113550578/599a3cfd-9f9d-4907-b271-96f2427aa30d)
+![image](https://github.com/David-CSUSM/Drawr/assets/113550578/e1cbdbd9-4fc8-4bec-b77c-0b139f082131)
+
+This will open a terminal window already navigated to the Drawr folder. 
+
+Next, type ‘.\gradlew run’ into the console. Drawr will now be running!
